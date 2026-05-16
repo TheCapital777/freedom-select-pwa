@@ -1,0 +1,237 @@
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import type { Product } from "@/lib/types";
+import { formatTZS } from "@/lib/utils";
+import { useCartStore } from "@/lib/cartStore";
+import { useWishlistStore } from "@/lib/wishlistStore";
+import { useState } from "react";
+import { getVendorById } from "@/lib/mockData";
+import { fluent3D } from "@/lib/fluentEmoji";
+import { useRoleStore } from "@/lib/roleStore";
+
+interface Props {
+  product: Product;
+  index?: number;
+}
+
+const HeartIcon = ({ filled }: { filled: boolean }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "#FFBB1C" : "none"} stroke={filled ? "#FFBB1C" : "#888"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+  </svg>
+);
+
+const ShareIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
+);
+
+export default function ProductCard({ product, index = 0 }: Props) {
+  const addItem = useCartStore((s) => s.addItem);
+  const { addItem: saveWish, removeItem: removeWish, hasItem } = useWishlistStore();
+  const role = useRoleStore((s) => s.role);
+  const [added, setAdded] = useState(false);
+  const [shared, setShared] = useState(false);
+  const vendor = getVendorById(product.vendor_id);
+  const wishlisted = hasItem(product.id);
+
+  function handleAdd(e: React.MouseEvent) {
+    e.preventDefault();
+    addItem({
+      product_id: product.id,
+      name: product.name,
+      price: product.price,
+      qty: 1,
+      unit: product.unit,
+      vendor_id: product.vendor_id,
+      emoji: product.emoji,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1400);
+  }
+
+  function handleWishlist(e: React.MouseEvent) {
+    e.preventDefault();
+    if (wishlisted) {
+      removeWish(product.id);
+    } else {
+      saveWish({
+        product_id: product.id,
+        name: product.name,
+        price: product.price,
+        unit: product.unit,
+        emoji: product.emoji,
+        vendor_name: vendor?.name ?? "",
+      });
+    }
+  }
+
+  async function handleShare(e: React.MouseEvent) {
+    e.preventDefault();
+    const url = `${window.location.origin}/products/${product.id}`;
+    const shareData = {
+      title: product.name,
+      text: `${product.name} — ${formatTZS(product.price)} / ${product.unit} on Freedom Select`,
+      url,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        setShared(true);
+        setTimeout(() => setShared(false), 1800);
+      }
+    } catch {
+      // user cancelled share — do nothing
+    }
+  }
+
+  const iconBtn: React.CSSProperties = {
+    width: "32px", height: "32px", borderRadius: "6px",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    flexShrink: 0, border: "1px solid #2A2A2A",
+    background: "#0C0C0C", cursor: "pointer",
+    transition: "border-color 0.2s, background 0.2s",
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{ duration: 0.35, delay: index * 0.06, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
+    >
+      <Link
+        href={`/products/${product.id}`}
+        style={{
+          display: "block",
+          background: "#111",
+          borderRadius: "10px",
+          overflow: "hidden",
+          border: "1px solid rgba(255,255,255,0.06)",
+          textDecoration: "none",
+        }}
+      >
+        {/* Image frame */}
+        <div style={{
+          position: "relative", width: "100%", aspectRatio: "1/1",
+          background: "#161616", display: "flex",
+          alignItems: "center", justifyContent: "center", overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(circle at 50% 55%, rgba(255,187,28,0.07) 0%, transparent 65%)",
+            pointerEvents: "none",
+          }} />
+
+          {fluent3D(product.emoji) ? (
+            <img src={fluent3D(product.emoji)!} alt={product.name}
+              style={{ width: "62%", height: "62%", objectFit: "contain", position: "relative", zIndex: 1 }} />
+          ) : (
+            <span style={{ fontSize: "clamp(3.5rem, 14vw, 5rem)", lineHeight: 1, position: "relative", zIndex: 1 }}>
+              {product.emoji}
+            </span>
+          )}
+
+          {product.featured && (
+            <span style={{
+              position: "absolute", top: "8px", right: "8px",
+              background: "#FFBB1C", color: "#0C0C0C",
+              fontSize: "8px", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
+              padding: "2px 6px", borderRadius: "3px",
+            }}>Hot</span>
+          )}
+
+          {!product.in_stock && (
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#FF6B00" }}>Out of Stock</span>
+            </div>
+          )}
+        </div>
+
+        {/* Card body */}
+        <div style={{ padding: "10px 12px 12px" }}>
+          <p style={{
+            fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+            color: "#383838", marginBottom: "3px",
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>{vendor?.name}</p>
+
+          <h3 style={{
+            fontSize: "12px", fontWeight: 700, lineHeight: 1.3, color: "#D0D0D0",
+            marginBottom: "10px",
+            display: "-webkit-box", WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical" as const, overflow: "hidden",
+          }}>{product.name}</h3>
+
+          {/* Price */}
+          <div style={{ marginBottom: "10px" }}>
+            <p style={{ fontSize: "14px", fontWeight: 900, color: "#FFBB1C", lineHeight: 1, letterSpacing: "-0.02em" }}>
+              {formatTZS(product.price)}
+            </p>
+            <p style={{ fontSize: "8px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#333", marginTop: "2px" }}>
+              / {product.unit}
+            </p>
+          </div>
+
+          {/* Action buttons row: ❤ · share · + */}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+
+            {/* Wishlist */}
+            <button
+              onClick={handleWishlist}
+              title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              style={{
+                ...iconBtn,
+                borderColor: wishlisted ? "rgba(255,187,28,0.45)" : "#2A2A2A",
+                background: wishlisted ? "rgba(255,187,28,0.08)" : "#0C0C0C",
+              }}
+            >
+              <HeartIcon filled={wishlisted} />
+            </button>
+
+            {/* Share */}
+            <button
+              onClick={handleShare}
+              title="Share product"
+              style={{
+                ...iconBtn,
+                borderColor: shared ? "rgba(34,197,94,0.45)" : "#2A2A2A",
+                background: shared ? "rgba(34,197,94,0.08)" : "#0C0C0C",
+              }}
+            >
+              {shared
+                ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                : <ShareIcon />
+              }
+            </button>
+
+            {/* Spacer */}
+            <div style={{ flex: 1 }} />
+
+            {/* Add to cart */}
+            <button
+              onClick={handleAdd}
+              disabled={!product.in_stock}
+              title="Add to cart"
+              style={{
+                width: "32px", height: "32px", borderRadius: "6px",
+                background: added ? "#22c55e" : "#FFBB1C",
+                color: "#0C0C0C", fontSize: "16px", fontWeight: 900,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0, border: "none", cursor: "pointer",
+                transition: "background 0.2s ease, transform 0.2s ease",
+                transform: added ? "scale(1.1)" : "scale(1)",
+              }}
+            >
+              {added ? "✓" : "+"}
+            </button>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}

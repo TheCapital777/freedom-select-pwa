@@ -1,0 +1,22 @@
+{
+  "name": "Freedom Select",
+  "short_name": "FreedomSelect",
+  "description": "Tanzania's multi-vendor marketplace — Construction Materials & More, delivered in Arusha.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "orientation": "portrait-primary",
+  "lang": "sw",
+  "categories": ["shopping", "business"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Shop Now",  "short_name": "Shop",   "url": "/products", "description": "Browse construction materials" },
+    { "name": "My Cart",   "short_name": "Cart",   "url": "/cart",     "description": "View your cart" },
+    { "name": "My Orders", "short_name": "Orders", "url": "/orders",   "description": "Track your orders" }
+  ]
+}
