@@ -115,7 +115,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
-      transition={{ duration: 0.35, delay: index * 0.06, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
+      transition={{ duration: 0.35, delay: Math.min(index, 6) * 0.05, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
     >
       <Link
         href={`/products/${product.id}`}
@@ -162,7 +162,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
 
           <h3 style={{
             fontSize: "15px", fontWeight: 700, lineHeight: 1.32, color: "#F0F0F0",
-            letterSpacing: "-0.01em", marginBottom: "10px", minHeight: "40px",
+            letterSpacing: "-0.01em", marginBottom: "8px",
             display: "-webkit-box", WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical" as const, overflow: "hidden",
           }}>{product.name}</h3>

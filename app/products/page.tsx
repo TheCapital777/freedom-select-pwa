@@ -28,20 +28,20 @@ export default function ProductsPage() {
       {/* Header */}
       <div style={{ padding: "20px 20px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
-          <span style={{ width: "3px", height: "16px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", display: "block" }} />
-          <h1 style={{ fontWeight: 900, fontSize: "17px", letterSpacing: "-0.01em" }}>Marketplace</h1>
+          <span style={{ width: "4px", height: "26px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", display: "block" }} />
+          <h1 className="display-lg">Marketplace</h1>
         </div>
-        <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A", paddingLeft: "13px" }}>
+        <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#B0B0B0", paddingLeft: "13px" }}>
           {filtered.length} products · Arusha
         </p>
       </div>
 
       {/* Search */}
-      <div style={{ padding: "14px 20px 0" }}>
+      <div style={{ padding: "22px 20px 0", maxWidth: "1220px", margin: "0 auto" }}>
         <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
           <svg
             width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="#4A4A4A" strokeWidth="2.2" strokeLinecap="round"
+            stroke="#B0B0B0" strokeWidth="2.2" strokeLinecap="round"
             style={{ position: "absolute", left: "14px", pointerEvents: "none", flexShrink: 0 }}
           >
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -85,15 +85,15 @@ export default function ProductsPage() {
       </div>
 
       {/* Grid */}
-      <div style={{ padding: "14px 20px 0" }}>
+      <div style={{ padding: "22px 20px 0", maxWidth: "1220px", margin: "0 auto" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", paddingTop: "60px", paddingBottom: "60px" }}>
             <SearchIcon size={40} style={{ marginBottom: "12px", color: "#6B6B6B" }} label="No results" />
             <p style={{ fontWeight: 800, fontSize: "14px", letterSpacing: "-0.01em", marginBottom: "6px" }}>No results</p>
-            <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>Try a different search or category</p>
+            <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#B0B0B0" }}>Try a different search or category</p>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+          <div className="product-grid">
             {filtered.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
             ))}

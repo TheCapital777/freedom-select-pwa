@@ -751,3 +751,27 @@ textarea:focus-visible {
   vertical-align: 1px;
   flex-shrink: 0;
 }
+
+/* ─── Catalogue grid ───────────────────────────────────────────────────────
+   Was gridTemplateColumns: "1fr 1fr" — two columns at every width, with
+   nothing capping the page. At 1500px that made each tile ~710px wide, and
+   since .tile-image-frame is aspect-ratio 1/1, ~710px tall. One bag of cement
+   filled the screen. auto-fill adds columns as the viewport grows rather than
+   inflating the two it has; the max-width stops the row stretching once the
+   tiles are already comfortable to read. */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
+  gap: 14px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+@media (min-width: 640px) {
+  /* A pointer sits further from the screen than a thumb does, so the tile that
+     reads well on a phone is too small on a laptop. Bigger track, and the
+     brief's 20-28px section spacing between them. */
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+}

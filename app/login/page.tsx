@@ -56,7 +56,7 @@ export default function LoginPage() {
       <p style={{
         fontSize: "12px", fontWeight: 600,
         letterSpacing: "0.22em", textTransform: "uppercase",
-        color: "#3A3A3A", marginBottom: "40px",
+        color: "#B0B0B0", marginBottom: "40px",
       }}>
         Select your role to continue
       </p>

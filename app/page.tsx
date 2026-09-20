@@ -36,7 +36,7 @@ export default function HomePage() {
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.05, ease: EASE }}
-          style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.26em", textTransform: "uppercase", color: "#3A3A3A", marginBottom: "2rem" }}
+          style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.26em", textTransform: "uppercase", color: "#B0B0B0", marginBottom: "2rem" }}
         >
           Arusha · Tanzania
         </motion.p>
@@ -80,7 +80,7 @@ export default function HomePage() {
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.32, ease: EASE }}
-          style={{ fontSize: "12px", color: "#3A3A3A", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "2.8rem" }}
+          style={{ fontSize: "12px", color: "#B0B0B0", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "2.8rem" }}
         >
           Build · Source · Deliver
         </motion.p>

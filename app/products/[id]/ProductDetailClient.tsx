@@ -156,7 +156,7 @@ export default function ProductDetailPage() {
               padding: "11px 14px", background: "#111",
               borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
             }}>
-              <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>
+              <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#B0B0B0" }}>
                 {key}
               </span>
               <span style={{ fontSize: "12px", fontWeight: 700, color: "#C0C0C0" }}>{val}</span>
