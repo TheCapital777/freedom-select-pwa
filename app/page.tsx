@@ -102,7 +102,7 @@ export default function HomePage() {
           </button>
           <Link href="/login" style={{
             padding: "18px 28px",
-            border: "1px solid rgba(255,255,255,0.1)", color: "#555",
+            border: "1px solid rgba(255,255,255,0.1)", color: "#B0B0B0",
             fontWeight: 600, fontSize: "11px",
             letterSpacing: "0.12em", textTransform: "uppercase",
             textDecoration: "none", borderRadius: "6px",

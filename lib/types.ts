@@ -10,7 +10,6 @@ export interface Product {
   stock: number;
   description: string;
   specs: Record<string, string>;
-  emoji: string;
   gradientFrom: string;
   gradientTo: string;
   in_stock: boolean;
@@ -27,7 +26,6 @@ export interface Vendor {
   wallet_balance: number;
   products_count: number;
   status: "active" | "pending" | "suspended";
-  emoji: string;
 }
 
 export interface OrderItem {
@@ -74,13 +72,11 @@ export interface CartItem {
   qty: number;
   unit: string;
   vendor_id: string;
-  emoji: string;
 }
 
 export interface Category {
   id: string;
   label: string;
-  emoji: string;
   active: boolean;
   comingSoon: boolean;
 }

@@ -3,12 +3,13 @@ import { useRoleStore } from "@/lib/roleStore";
 import { useRouter } from "next/navigation";
 import type { Role } from "@/lib/types";
 import { motion } from "framer-motion";
+import { CartIcon, StoreIcon, TruckIcon, ShieldIcon, type IconProps } from "@/app/_components/icons/StatusIcons";
 
-const ROLES: { id: Role; icon: string; title: string; desc: string; color: string }[] = [
-  { id: "customer",  icon: "🛒", title: "Customer",   desc: "Browse and order products",              color: "#FFBB1C" },
-  { id: "vendor",    icon: "🏪", title: "Vendor",     desc: "Manage your catalog and fulfill orders", color: "#FF6B00" },
-  { id: "transport", icon: "🚚", title: "Transport",  desc: "Manage pickups and deliveries",           color: "#a78bfa" },
-  { id: "admin",     icon: "👑", title: "Admin",      desc: "Platform oversight and financials",       color: "#22c55e" },
+const ROLES: { id: Role; Icon: (p: IconProps) => React.ReactElement; title: string; desc: string; color: string }[] = [
+  { id: "customer",  Icon: CartIcon  , title: "Customer",   desc: "Browse and order products",              color: "#FFBB1C" },
+  { id: "vendor",    Icon: StoreIcon , title: "Vendor",     desc: "Manage your catalog and fulfill orders", color: "#FF6B00" },
+  { id: "transport", Icon: TruckIcon , title: "Transport",  desc: "Manage pickups and deliveries",           color: "#a78bfa" },
+  { id: "admin",     Icon: ShieldIcon, title: "Admin",      desc: "Platform oversight and financials",       color: "#22c55e" },
 ];
 
 const ROUTES: Record<Role, string> = {
@@ -84,11 +85,11 @@ export default function LoginPage() {
               fontSize: "28px", flexShrink: 0,
               background: `${r.color}15`, border: `1px solid ${r.color}28`,
             }}>
-              {r.icon}
+              <r.Icon size={26} />
             </div>
             <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
               <p style={{ fontWeight: 800, fontSize: "17px", color: "#F0F0F0", marginBottom: "6px" }}>{r.title}</p>
-              <p style={{ fontSize: "13px", color: "#555", fontWeight: 400, lineHeight: 1.4 }}>{r.desc}</p>
+              <p style={{ fontSize: "13px", color: "#B0B0B0", fontWeight: 400, lineHeight: 1.4 }}>{r.desc}</p>
             </div>
             <span style={{ color: r.color, fontWeight: 900, fontSize: "24px", flexShrink: 0, lineHeight: 1 }}>›</span>
           </motion.button>

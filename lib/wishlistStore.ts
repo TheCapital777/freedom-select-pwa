@@ -7,7 +7,6 @@ export interface WishlistItem {
   name: string;
   price: number;
   unit: string;
-  emoji: string;
   vendor_name: string;
 }
 

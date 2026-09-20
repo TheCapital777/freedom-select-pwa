@@ -13,7 +13,46 @@ if hasattr(sys.stdout, 'reconfigure'):
 def strip_ansi(s):
     return re.sub(r'\x1b\[[0-9;]*m', '', s or '')
 
-TOKEN = "nfc_hsU9n3rNXKmgJAVdParbEC92Xytovq35eb15"
+# ─────────────────────────────────────────────────────────────────────────────
+# Netlify credentials.
+#
+# This was a hardcoded personal access token, committed to a PUBLIC GitHub repo.
+# A Netlify PAT is account-wide: it can deploy to, reconfigure or delete every
+# site on the account and read their environment variables. That token is revoked.
+#
+# The replacement is read at runtime and never stored in this file:
+#   1. NETLIFY_AUTH_TOKEN in the environment, or
+#   2. NETLIFY_AUTH_TOKEN=... in .env.local beside this script (gitignored)
+#
+# Never paste a token into this file, and never into a chat window.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _load_token() -> str:
+    token = os.environ.get("NETLIFY_AUTH_TOKEN", "").strip()
+    if token:
+        return token
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    for name in (".env.local", ".env"):
+        path = os.path.join(here, name)
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line.startswith("NETLIFY_AUTH_TOKEN="):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+
+    raise SystemExit(
+        "\nNo Netlify token found.\n\n"
+        "Create a file called .env.local next to this script, containing one line:\n\n"
+        "    NETLIFY_AUTH_TOKEN=your-token-here\n\n"
+        ".env.local is gitignored, so it will never be committed.\n"
+        "Get a token at https://app.netlify.com/user/applications\n"
+    )
+
+
+TOKEN = _load_token()
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 SITE_ID = "db3d6e80-d0a4-497a-969c-58ea65e351f5"  # already created
 

@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { PRODUCTS } from "@/lib/mockData";
 import ProductCard from "../_components/ProductCard";
+import { SearchIcon } from "@/app/_components/icons/StatusIcons";
 
 export default function ProductsPage() {
   const [search, setSearch] = useState("");
@@ -84,7 +85,7 @@ export default function ProductsPage() {
       <div style={{ padding: "14px 20px 0" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", paddingTop: "60px", paddingBottom: "60px" }}>
-            <p style={{ fontSize: "40px", marginBottom: "12px" }}>🔍</p>
+            <SearchIcon size={40} style={{ marginBottom: "12px", color: "#6B6B6B" }} label="No results" />
             <p style={{ fontWeight: 800, fontSize: "14px", letterSpacing: "-0.01em", marginBottom: "6px" }}>No results</p>
             <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>Try a different search or category</p>
           </div>

@@ -2,6 +2,7 @@
 import { DELIVERY_TASKS, ORDERS } from "@/lib/mockData";
 import { formatTZS } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { PackageIcon, MapPinIcon } from "@/app/_components/icons/StatusIcons";
 
 const DELIVERY_FEE = 8000;
 
@@ -39,7 +40,7 @@ export default function TransportOrdersPage() {
       {/* Earnings summary */}
       <div style={{ ...card, padding: "24px 20px", marginBottom: "24px", background: "linear-gradient(135deg, #0F0F18, #0C0C0C)", border: "1px solid rgba(167,139,250,0.2)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: 0, right: 0, width: "96px", height: "96px", borderRadius: "50%", background: "#a78bfa", opacity: 0.07, filter: "blur(32px)", pointerEvents: "none" }} />
-        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#555", marginBottom: "12px" }}>This Week's Earnings</p>
+        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B0B0B0", marginBottom: "12px" }}>This Week's Earnings</p>
         <p style={{ fontWeight: 900, fontSize: "clamp(2rem,8vw,2.8rem)", color: "#FFBB1C", letterSpacing: "-0.03em", marginBottom: "20px" }}>{formatTZS(weeklyEarned)}</p>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
@@ -88,7 +89,7 @@ export default function TransportOrdersPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 18px", borderBottom: "1px solid #1E1E1E" }}>
                 <div>
                   <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C", marginBottom: "4px" }}>Order {task.order_id}</p>
-                  <p style={{ fontSize: "13px", color: "#555" }}>{task.customer_name}</p>
+                  <p style={{ fontSize: "13px", color: "#B0B0B0" }}>{task.customer_name}</p>
                 </div>
                 <span style={{ padding: "6px 12px", borderRadius: "6px", background: `${color}18`, color, fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</span>
               </div>
@@ -96,16 +97,16 @@ export default function TransportOrdersPage() {
               {/* Route */}
               <div style={{ padding: "16px 18px", borderBottom: "1px solid #1A1A1A" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "10px" }}>
-                  <span style={{ fontSize: "14px", marginTop: "1px", flexShrink: 0 }}>📦</span>
+                  <PackageIcon size={14} style={{ marginTop: "2px", flexShrink: 0, color: "#B0B0B0" }} />
                   <div>
-                    <p style={{ fontSize: "12px", color: "#555", fontWeight: 600, marginBottom: "2px" }}>Pickup from</p>
+                    <p style={{ fontSize: "12px", color: "#B0B0B0", fontWeight: 600, marginBottom: "2px" }}>Pickup from</p>
                     <p style={{ fontSize: "14px", fontWeight: 700 }}>{task.vendor_name} · {task.pickup_location}</p>
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ fontSize: "14px", marginTop: "1px", flexShrink: 0 }}>📍</span>
+                  <MapPinIcon size={14} style={{ marginTop: "2px", flexShrink: 0, color: "#B0B0B0" }} />
                   <div>
-                    <p style={{ fontSize: "12px", color: "#555", fontWeight: 600, marginBottom: "2px" }}>Deliver to</p>
+                    <p style={{ fontSize: "12px", color: "#B0B0B0", fontWeight: 600, marginBottom: "2px" }}>Deliver to</p>
                     <p style={{ fontSize: "14px", fontWeight: 700 }}>{task.delivery_location}</p>
                   </div>
                 </div>

@@ -5,7 +5,9 @@ import { formatTZS, buildWhatsAppURL, buildWhatsAppMessage } from "@/lib/utils";
 import { useCartStore } from "@/lib/cartStore";
 import { useState } from "react";
 import Link from "next/link";
-import { fluent3D } from "@/lib/fluentEmoji";
+import { getProductIcon, getProductIconLabel } from "@/lib/productIcon";
+import { StarIcon, CheckIcon, WhatsAppIcon, EmptyCrateIcon, ArrowLeftIcon } from "@/app/_components/icons/StatusIcons";
+import VendorMark from "@/app/_components/VendorMark";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +20,7 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div style={{ background: "#0C0C0C", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", padding: "0 24px" }}>
-        <p style={{ fontSize: "48px" }}>😕</p>
+        <EmptyCrateIcon size={56} style={{ color: "#6B6B6B" }} label="Not found" />
         <p style={{ fontWeight: 900, fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Product not found</p>
         <Link href="/products" style={{ fontSize: "12px", color: "#FFBB1C", textDecoration: "none" }}>← Back to Materials</Link>
       </div>
@@ -28,13 +30,13 @@ export default function ProductDetailPage() {
   const vendor = getVendorById(product.vendor_id);
 
   function handleAdd() {
-    addItem({ product_id: product!.id, name: product!.name, price: product!.price, qty, unit: product!.unit, vendor_id: product!.vendor_id, emoji: product!.emoji });
+    addItem({ product_id: product!.id, name: product!.name, price: product!.price, qty, unit: product!.unit, vendor_id: product!.vendor_id });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   }
 
   const waMsg = buildWhatsAppMessage(
-    [{ product_id: product.id, name: product.name, price: product.price, qty, unit: product.unit, vendor_id: product.vendor_id, emoji: product.emoji }],
+    [{ product_id: product.id, name: product.name, price: product.price, qty, unit: product.unit, vendor_id: product.vendor_id }],
     "Customer", "", "Arusha", "", product.price * qty, 8000
   );
 
@@ -57,31 +59,37 @@ export default function ProductDetailPage() {
           pointerEvents: "none",
         }} />
 
-        {/* 3D icon or fallback emoji */}
-        {fluent3D(product.emoji) ? (
-          <img
-            src={fluent3D(product.emoji)!}
-            alt={product.name}
-            style={{ width: "55%", maxWidth: "220px", objectFit: "contain", position: "relative", zIndex: 1 }}
-          />
-        ) : (
-          <span style={{ fontSize: "clamp(6rem, 22vw, 9rem)", lineHeight: 1, position: "relative", zIndex: 1 }}>
-            {product.emoji}
-          </span>
-        )}
+        {/* Product icon. Self-hosted inline SVG per design-system/MASTER.md —
+            no hotlinked emoji PNG, so this survives a strict img-src CSP. */}
+        {(() => {
+          const Icon = getProductIcon(product);
+          return (
+            <Icon
+              size={220}
+              label={getProductIconLabel(product)}
+              style={{ width: "55%", maxWidth: "220px", height: "auto", position: "relative", zIndex: 1 }}
+            />
+          );
+        })()}
 
-        {/* Back button */}
+        {/* Back button. Restored after an edit of mine removed it; while here,
+            raised from #888 (about 3.3:1 on this hero) to the dim text token, and
+            padded out to a 44px touch target per design-system/MASTER.md. */}
         <button
           onClick={() => router.back()}
+          aria-label="Go back"
           style={{
             position: "absolute", top: "16px", left: "16px",
             background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.1)",
-            color: "#888", fontSize: "11px", fontWeight: 600,
+            color: "#B0B0B0", fontSize: "11px", fontWeight: 600,
             letterSpacing: "0.1em", textTransform: "uppercase",
-            padding: "7px 12px", borderRadius: "6px", cursor: "pointer",
+            padding: "0 14px", minHeight: "44px", minWidth: "44px",
+            display: "inline-flex", alignItems: "center", gap: "6px",
+            borderRadius: "6px", cursor: "pointer",
           }}
         >
-          ← Back
+          <ArrowLeftIcon size={14} />
+          Back
         </button>
 
         {/* Featured badge */}
@@ -92,7 +100,8 @@ export default function ProductDetailPage() {
             fontSize: "8px", fontWeight: 800, letterSpacing: "0.1em",
             textTransform: "uppercase", padding: "4px 8px", borderRadius: "4px",
           }}>
-            ★ Featured
+            <StarIcon size={10} style={{ verticalAlign: "-1px", marginRight: "3px" }} />
+            Featured
           </span>
         )}
       </div>
@@ -102,7 +111,7 @@ export default function ProductDetailPage() {
 
         {/* Vendor + stock */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-          <span style={{ fontSize: "14px" }}>{vendor?.emoji}</span>
+          <VendorMark name={vendor?.name ?? ""} size={20} />
           <p style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#444" }}>
             {vendor?.name}
           </p>
@@ -130,7 +139,7 @@ export default function ProductDetailPage() {
         </p>
 
         {/* Description */}
-        <p style={{ fontSize: "13px", lineHeight: 1.7, color: "#555", marginTop: "12px", marginBottom: "20px" }}>
+        <p style={{ fontSize: "13px", lineHeight: 1.7, color: "#B0B0B0", marginTop: "12px", marginBottom: "20px" }}>
           {product.description}
         </p>
 
@@ -187,7 +196,14 @@ export default function ProductDetailPage() {
               transition: "background 0.2s ease",
             }}
           >
-            {added ? "✓ Added to Cart" : "Add to Cart"}
+            {added ? (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                <CheckIcon size={14} />
+                Added to Cart
+              </span>
+            ) : (
+              "Add to Cart"
+            )}
           </button>
           <a
             href={buildWhatsAppURL(waMsg)}
@@ -203,7 +219,8 @@ export default function ProductDetailPage() {
               display: "flex", alignItems: "center", gap: "6px",
             }}
           >
-            💬 WhatsApp
+            <WhatsAppIcon size={14} />
+            WhatsApp
           </a>
         </div>
       </div>

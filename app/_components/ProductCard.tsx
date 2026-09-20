@@ -7,7 +7,8 @@ import { useCartStore } from "@/lib/cartStore";
 import { useWishlistStore } from "@/lib/wishlistStore";
 import { useState } from "react";
 import { getVendorById } from "@/lib/mockData";
-import { fluent3D } from "@/lib/fluentEmoji";
+import { getProductIcon } from "@/lib/productIcon";
+import { ICON_STROKE } from "@/app/_components/icons/ProductIcons";
 import { useRoleStore } from "@/lib/roleStore";
 
 interface Props {
@@ -18,6 +19,13 @@ interface Props {
 const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "#FFBB1C" : "none"} stroke={filled ? "#FFBB1C" : "#888"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+  </svg>
+);
+
+/** Confirmation tick. MASTER.md: status glyphs are SVG, never the ✓ character. */
+const CheckMark = ({ size = 14, color = "#22c55e" }: { size?: number; color?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden focusable={false}>
+    <polyline points="20 6 9 17 4 12" />
   </svg>
 );
 
@@ -36,6 +44,8 @@ export default function ProductCard({ product, index = 0 }: Props) {
   const [shared, setShared] = useState(false);
   const vendor = getVendorById(product.vendor_id);
   const wishlisted = hasItem(product.id);
+  // Product type → icon. Never keyed on product.emoji (see lib/productIcon.ts).
+  const ProductIcon = getProductIcon(product);
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault();
@@ -46,7 +56,6 @@ export default function ProductCard({ product, index = 0 }: Props) {
       qty: 1,
       unit: product.unit,
       vendor_id: product.vendor_id,
-      emoji: product.emoji,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
@@ -62,7 +71,6 @@ export default function ProductCard({ product, index = 0 }: Props) {
         name: product.name,
         price: product.price,
         unit: product.unit,
-        emoji: product.emoji,
         vendor_name: vendor?.name ?? "",
       });
     }
@@ -106,39 +114,26 @@ export default function ProductCard({ product, index = 0 }: Props) {
     >
       <Link
         href={`/products/${product.id}`}
-        style={{
-          display: "block",
-          background: "#111",
-          borderRadius: "10px",
-          overflow: "hidden",
-          border: "1px solid rgba(255,255,255,0.06)",
-          textDecoration: "none",
-        }}
+        className="product-tile"
+        style={{ display: "block", textDecoration: "none" }}
       >
-        {/* Image frame */}
-        <div style={{
-          position: "relative", width: "100%", aspectRatio: "1/1",
-          background: "#161616", display: "flex",
-          alignItems: "center", justifyContent: "center", overflow: "hidden",
-        }}>
+        {/* Image frame — 1:1 locked by .tile-image-frame; every direct child is
+            absolute inset-0 and centred by globals.css. */}
+        <div className="tile-image-frame">
           <div style={{
-            position: "absolute", inset: 0,
             background: "radial-gradient(circle at 50% 55%, rgba(255,187,28,0.07) 0%, transparent 65%)",
             pointerEvents: "none",
           }} />
 
-          {fluent3D(product.emoji) ? (
-            <img src={fluent3D(product.emoji)!} alt={product.name}
-              style={{ width: "62%", height: "62%", objectFit: "contain", position: "relative", zIndex: 1 }} />
-          ) : (
-            <span style={{ fontSize: "clamp(3.5rem, 14vw, 5rem)", lineHeight: 1, position: "relative", zIndex: 1 }}>
-              {product.emoji}
-            </span>
-          )}
+          {/* .tile-emoji keeps the hover scale (transform only, no layout shift).
+              Decorative: the product name is rendered directly below. */}
+          <div className="tile-emoji">
+            <ProductIcon size="58%" strokeWidth={ICON_STROKE.lg} />
+          </div>
 
           {product.featured && (
             <span style={{
-              position: "absolute", top: "8px", right: "8px",
+              inset: "8px 8px auto auto",
               background: "#FFBB1C", color: "#0C0C0C",
               fontSize: "8px", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
               padding: "2px 6px", borderRadius: "3px",
@@ -146,14 +141,14 @@ export default function ProductCard({ product, index = 0 }: Props) {
           )}
 
           {!product.in_stock && (
-            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ background: "rgba(0,0,0,0.7)" }}>
               <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#FF6B00" }}>Out of Stock</span>
             </div>
           )}
         </div>
 
         {/* Card body */}
-        <div style={{ padding: "10px 12px 12px" }}>
+        <div className="tile-info">
           <p style={{
             fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
             color: "#383838", marginBottom: "3px",
@@ -203,10 +198,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
                 background: shared ? "rgba(34,197,94,0.08)" : "#0C0C0C",
               }}
             >
-              {shared
-                ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                : <ShareIcon />
-              }
+              {shared ? <CheckMark /> : <ShareIcon />}
             </button>
 
             {/* Spacer */}
@@ -217,6 +209,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
               onClick={handleAdd}
               disabled={!product.in_stock}
               title="Add to cart"
+              aria-label={added ? `${product.name} added to cart` : `Add ${product.name} to cart`}
               style={{
                 width: "32px", height: "32px", borderRadius: "6px",
                 background: added ? "#22c55e" : "#FFBB1C",
@@ -227,7 +220,10 @@ export default function ProductCard({ product, index = 0 }: Props) {
                 transform: added ? "scale(1.1)" : "scale(1)",
               }}
             >
-              {added ? "✓" : "+"}
+              {added
+                ? <CheckMark size={16} color="#0C0C0C" />
+                : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0C0C0C" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden focusable={false}><line x1="12" y1="5.5" x2="12" y2="18.5" /><line x1="5.5" y1="12" x2="18.5" y2="12" /></svg>
+              }
             </button>
           </div>
         </div>
