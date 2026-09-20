@@ -133,7 +133,12 @@ out_dir = os.path.join(PROJECT_DIR, "out").replace("\\", "/")
 # anything that can list processes, and it lands in shell history.
 _env = {**os.environ, "NETLIFY_AUTH_TOKEN": TOKEN}
 deploy = subprocess.run(
-    f'netlify deploy --prod --dir "{out_dir}" --site {site_id} --message "Premium pass: SVG icons, contrast, no hardcoded token"',
+    # --no-build: this script already ran `npm run build` above and stamped the
+    # service-worker cache key into the result. Letting the CLI rebuild from
+    # netlify.toml runs the whole thing a second time, undoes work done between
+    # the two (that is how the SW stamp got lost once already), and is where
+    # "Project not found" was coming from. Ship exactly what was built here.
+    f'netlify deploy --prod --no-build --dir "{out_dir}" --site {site_id} --message "Hero spacing + install panel placement"',
     cwd=PROJECT_DIR,
     capture_output=True,
     encoding="utf-8",
