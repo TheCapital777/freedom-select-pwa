@@ -54,7 +54,16 @@ def _load_token() -> str:
 
 TOKEN = _load_token()
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-SITE_ID = "db3d6e80-d0a4-497a-969c-58ea65e351f5"  # already created
+SITE_ID = "f2b473ea-442c-4dee-8079-f48c9e5923bd"  # freedom-select-pwa
+# History of this line, because it has been wrong twice:
+#   db3d6e80-…  original value; that site no longer existed, so the script would
+#               have failed rather than deployed anywhere
+#   b831ca0d-…  the real freedom-select-pwa, deleted 20 Sep 2026
+#   f2b473ea-…  its replacement, created the same day under the SAME name so the
+#               URL and any installed PWA survive the swap
+# Verified against the API: name freedom-select-pwa -> freedom-select-pwa.netlify.app
+# If you ever change this, confirm the id against the name first. There are 55
+# similarly named sites on this account.
 
 def netlify_post(path, body=None):
     url = f"https://api.netlify.com/api/v1{path}"
@@ -72,7 +81,7 @@ def netlify_post(path, body=None):
         return json.loads(r.read())
 
 site_id = SITE_ID
-site_url = "https://freedom-select-tz.netlify.app"
+site_url = "https://freedom-select-pwa.netlify.app"  # was …-tz, which is not this site
 print(f"Site: {site_url}  (id={site_id})")
 
 print("\nStep 1 — building project...")
@@ -90,15 +99,47 @@ if build.returncode != 0:
     raise SystemExit(1)
 print("  Build OK")
 
+# ── Step 1b: bust the service-worker cache ───────────────────────────────────
+# sw.js is cache-first with background revalidation, and its `activate` handler
+# deletes every cache whose name is not CACHE_NAME. So a deploy that leaves that
+# name unchanged serves returning visitors the PREVIOUS build for a whole load —
+# which is exactly how the first deploy of the icon work went out looking
+# unchanged on an already-visited browser.
+#
+# Stamped in public/, NOT out/: netlify.toml sets command = "npm run build", so the
+# Netlify CLI rebuilds out/ during the deploy and overwrites anything written there.
+# That cost one deploy to find. Aborts rather than shipping a stale cache key.
+sw_path = os.path.join(PROJECT_DIR, "public", "sw.js")
+if not os.path.exists(sw_path):
+    raise SystemExit("  ABORT: public/sw.js missing - refusing to deploy without a cache stamp")
+
+import time
+
+_stamp = time.strftime("%Y%m%d-%H%M%S")
+with open(sw_path, encoding="utf-8") as fh:
+    _sw = fh.read()
+_new = re.sub(r'const CACHE_NAME = "[^"]+";',
+              'const CACHE_NAME = "freedom-select-%s";' % _stamp, _sw, count=1)
+if _new == _sw:
+    raise SystemExit("  ABORT: could not stamp CACHE_NAME in out/sw.js - "
+                     "returning visitors would be served a stale build")
+with open(sw_path, "w", encoding="utf-8") as fh:
+    fh.write(_new)
+print("  Service-worker cache stamped: freedom-select-%s" % _stamp)
+
 print("\nStep 2 — deploying to Netlify...")
 out_dir = os.path.join(PROJECT_DIR, "out").replace("\\", "/")
+# The token goes in the environment, not on the command line: argv is visible to
+# anything that can list processes, and it lands in shell history.
+_env = {**os.environ, "NETLIFY_AUTH_TOKEN": TOKEN}
 deploy = subprocess.run(
-    f'netlify deploy --prod --dir "{out_dir}" --site {site_id} --auth {TOKEN} --message "Freedom Select PWA Phase 1"',
+    f'netlify deploy --prod --dir "{out_dir}" --site {site_id} --message "Premium pass: SVG icons, contrast, no hardcoded token"',
     cwd=PROJECT_DIR,
     capture_output=True,
     encoding="utf-8",
     errors="replace",
     shell=True,
+    env=_env,
 )
 print(strip_ansi(deploy.stdout)[-3000:])
 if deploy.returncode != 0:
