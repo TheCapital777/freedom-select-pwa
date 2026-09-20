@@ -10,7 +10,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   delivered:  { label: "Delivered",  color: "#22c55e", bg: "rgba(34,197,94,0.1)" },
 };
 
-const card: React.CSSProperties = { background: "#161616", border: "1px solid #242424", borderRadius: "12px" };
+const card: React.CSSProperties = { background: "#161616", border: "1px solid #242424", borderRadius: "var(--radius-card)" };
 
 export default function VendorOrdersPage() {
   const vendor = VENDORS[0];
@@ -26,14 +26,14 @@ export default function VendorOrdersPage() {
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>My Orders</h1>
       </div>
 
       {/* Earnings summary */}
       <div style={{ ...card, padding: "24px 20px", marginBottom: "24px", background: "linear-gradient(135deg, #181208, #0C0C0C)", border: "1px solid rgba(255,187,28,0.2)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: 0, right: 0, width: "96px", height: "96px", borderRadius: "50%", background: "#FFBB1C", opacity: 0.08, filter: "blur(32px)", pointerEvents: "none" }} />
-        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B0B0B0", marginBottom: "12px" }}>Net Earnings (All Time)</p>
+        <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B0B0B0", marginBottom: "12px" }}>Net Earnings (All Time)</p>
         <p style={{ fontWeight: 900, fontSize: "clamp(2rem,8vw,2.8rem)", color: "#FFBB1C", letterSpacing: "-0.03em", marginBottom: "20px" }}>{formatTZS(totalNet)}</p>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "8px" }}>
@@ -43,9 +43,9 @@ export default function VendorOrdersPage() {
             { label: "Gross",      val: formatTZS(totalGross),   color: "#F0F0F0" },
             { label: "Commission", val: formatTZS(totalCommission), color: "#ef4444" },
           ].map((k) => (
-            <div key={k.label} style={{ background: "rgba(255,255,255,0.03)", borderRadius: "8px", padding: "12px 8px", textAlign: "center" }}>
+            <div key={k.label} style={{ background: "rgba(255,255,255,0.03)", borderRadius: "var(--radius-input)", padding: "12px 8px", textAlign: "center" }}>
               <p style={{ fontWeight: 900, fontSize: "14px", color: k.color, marginBottom: "4px" }}>{k.val}</p>
-              <p style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#444" }}>{k.label}</p>
+              <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#B0B0B0" }}>{k.label}</p>
             </div>
           ))}
         </div>
@@ -64,19 +64,19 @@ export default function VendorOrdersPage() {
               {/* Header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 18px", borderBottom: "1px solid #1E1E1E" }}>
                 <div>
-                  <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C", marginBottom: "4px" }}>{o.id}</p>
+                  <p style={{ fontWeight: 800, fontSize: "16px", color: "#FFBB1C", marginBottom: "4px" }}>{o.id}</p>
                   <p style={{ fontSize: "13px", color: "#B0B0B0" }}>
                     {new Date(o.created_at).toLocaleDateString("en-TZ", { day: "numeric", month: "short", year: "numeric" })} · {o.customer_name}
                   </p>
                 </div>
-                <span style={{ padding: "6px 12px", borderRadius: "6px", background: st.bg, color: st.color, fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>{st.label}</span>
+                <span style={{ padding: "6px 12px", borderRadius: "var(--radius-plate)", background: st.bg, color: st.color, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>{st.label}</span>
               </div>
 
               {/* Items packed */}
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #1A1A1A" }}>
                 {myItems.map((it) => (
                   <p key={it.product_id} style={{ fontSize: "14px", color: "#B0B0B0", marginBottom: "6px" }}>
-                    {it.product_name} <span style={{ color: "#4A4A4A" }}>×{it.qty} {it.unit}</span>
+                    {it.product_name} <span style={{ color: "#B0B0B0" }}>×{it.qty} {it.unit}</span>
                     <span style={{ float: "right", color: "#F0F0F0", fontWeight: 700 }}>{formatTZS(it.subtotal)}</span>
                   </p>
                 ))}
@@ -94,7 +94,7 @@ export default function VendorOrdersPage() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #1E1E1E", paddingTop: "12px" }}>
                   <span style={{ fontSize: "14px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em" }}>Your Payout</span>
-                  <span style={{ fontSize: "18px", fontWeight: 900, color: "#22c55e" }}>{formatTZS(o.vendor_payout)}</span>
+                  <span style={{ fontSize: "17px", fontWeight: 900, color: "#22c55e" }}>{formatTZS(o.vendor_payout)}</span>
                 </div>
               </div>
             </motion.div>

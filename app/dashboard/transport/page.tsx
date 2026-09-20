@@ -13,7 +13,7 @@ const STATUS_CONFIG: Record<DeliveryTask["status"], { label: string; color: stri
   delivered:        { label: "Delivered",        color: "#22c55e", bg: "rgba(34,197,94,0.1)",    Icon: CheckIcon },
 };
 
-const card: React.CSSProperties = { background: "#161616", border: "1px solid #242424", borderRadius: "12px" };
+const card: React.CSSProperties = { background: "#161616", border: "1px solid #242424", borderRadius: "var(--radius-card)" };
 
 export default function TransportHome() {
   const [tasks, setTasks] = useState(DELIVERY_TASKS);
@@ -36,7 +36,7 @@ export default function TransportHome() {
 
       {/* Page header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>Transport</h1>
       </div>
 
@@ -48,17 +48,17 @@ export default function TransportHome() {
           { label: "Done Today",  val: completed.length, color: "#22c55e" },
         ].map((k) => (
           <div key={k.label} style={{ ...card, padding: "18px 12px", textAlign: "center" }}>
-            <p style={{ fontWeight: 900, fontSize: "28px", color: k.color, letterSpacing: "-0.03em", marginBottom: "8px" }}>{k.val}</p>
-            <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#444" }}>{k.label}</p>
+            <p style={{ fontWeight: 900, fontSize: "30px", color: k.color, letterSpacing: "-0.03em", marginBottom: "8px" }}>{k.val}</p>
+            <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B0B0B0" }}>{k.label}</p>
           </div>
         ))}
       </div>
 
       {/* Active Deliveries */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-        <div style={{ width: "3px", height: "20px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "20px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h2 style={{ fontWeight: 900, fontSize: "17px", letterSpacing: "-0.01em" }}>Active Deliveries</h2>
-        <span style={{ padding: "3px 10px", background: "#FFBB1C", color: "#0C0C0C", borderRadius: "4px", fontSize: "11px", fontWeight: 800 }}>
+        <span style={{ padding: "3px 10px", background: "#FFBB1C", color: "#0C0C0C", borderRadius: "var(--radius-stamp)", fontSize: "12px", fontWeight: 800 }}>
           {active.length}
         </span>
       </div>
@@ -71,8 +71,8 @@ export default function TransportHome() {
               style={{ ...card, overflow: "hidden" }}>
               <div style={{ height: "2.5px", background: st.color, opacity: 0.6 }} />
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 18px", borderBottom: "1px solid #1E1E1E" }}>
-                <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C" }}>Order {task.order_id}</p>
-                <span style={{ padding: "6px 12px", display: "flex", alignItems: "center", gap: "6px", background: st.bg, color: st.color, borderRadius: "6px", fontSize: "12px", fontWeight: 700 }}>
+                <p style={{ fontWeight: 800, fontSize: "16px", color: "#FFBB1C" }}>Order {task.order_id}</p>
+                <span style={{ padding: "6px 12px", display: "flex", alignItems: "center", gap: "6px", background: st.bg, color: st.color, borderRadius: "var(--radius-plate)", fontSize: "12px", fontWeight: 700 }}>
                   <st.Icon size={13} />
                   {st.label}
                 </span>
@@ -81,23 +81,23 @@ export default function TransportHome() {
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "14px" }}>
                   <PackageIcon size={16} style={{ marginTop: "2px", flexShrink: 0, color: "#B0B0B0" }} />
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: "15px", marginBottom: "4px" }}>Pickup: {task.vendor_name}</p>
+                    <p style={{ fontWeight: 700, fontSize: "16px", marginBottom: "4px" }}>Pickup: {task.vendor_name}</p>
                     <p style={{ fontSize: "13px", color: "#B0B0B0" }}>{task.pickup_location}</p>
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "20px" }}>
                   <MapPinIcon size={16} style={{ marginTop: "2px", flexShrink: 0, color: "#B0B0B0" }} />
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: "15px", marginBottom: "4px" }}>Deliver to: {task.customer_name}</p>
+                    <p style={{ fontWeight: 700, fontSize: "16px", marginBottom: "4px" }}>Deliver to: {task.customer_name}</p>
                     <p style={{ fontSize: "13px", color: "#B0B0B0" }}>{task.delivery_location}</p>
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <p style={{ fontSize: "13px", color: "#444" }}>⏱ {task.estimated_time} · {task.items_count} items</p>
+                  <p style={{ fontSize: "13px", color: "#B0B0B0", display: "flex", alignItems: "center", gap: "6px" }}><ClockIcon size={14} aria-hidden="true" />{task.estimated_time} · {task.items_count} items</p>
                   {task.status !== "delivered" && (
                     <button
                       onClick={() => advance(task.id)}
-                      style={{ padding: "11px 18px", background: "rgba(255,187,28,0.1)", border: "1px solid rgba(255,187,28,0.25)", borderRadius: "8px", color: "#FFBB1C", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
+                      style={{ padding: "11px 18px", background: "rgba(255,187,28,0.1)", border: "1px solid rgba(255,187,28,0.25)", borderRadius: "var(--radius-input)", color: "#FFBB1C", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
                     >
                       {task.status === "ready_for_pickup" ? "Mark Picked Up" :
                        task.status === "picked_up" ? "Mark In Transit" : "Mark Delivered"} →
@@ -122,14 +122,14 @@ export default function TransportHome() {
       {completed.length > 0 && (
         <>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-            <div style={{ width: "3px", height: "20px", background: "#22c55e", borderRadius: "2px", flexShrink: 0 }} />
+            <div style={{ width: "3px", height: "20px", background: "#22c55e", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
             <h2 style={{ fontWeight: 900, fontSize: "17px", letterSpacing: "-0.01em" }}>Completed Today</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {completed.map((task) => (
               <div key={task.id} style={{ ...card, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 18px" }}>
                 <div>
-                  <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C", marginBottom: "5px" }}>{task.order_id}</p>
+                  <p style={{ fontWeight: 800, fontSize: "16px", color: "#FFBB1C", marginBottom: "5px" }}>{task.order_id}</p>
                   <p style={{ fontSize: "13px", color: "#B0B0B0" }}>{task.delivery_location}</p>
                 </div>
                 <div style={{ textAlign: "right" }}>

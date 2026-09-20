@@ -80,3 +80,22 @@ export interface Category {
   active: boolean;
   comingSoon: boolean;
 }
+
+/**
+ * A transporter — the person and vehicle that moves a load.
+ *
+ * There was no such entity before: the app had DeliveryTask, which records a job,
+ * but nothing recording who is available to do one. An admin managing a fleet
+ * needs the second thing.
+ */
+export interface Transporter {
+  id: string;
+  name: string;
+  phone: string;
+  vehicle: "pickup" | "canter" | "lorry" | "tipper" | "boda";
+  plate: string;
+  capacity: string;
+  region: string;
+  status: "active" | "pending" | "suspended";
+  trips_completed: number;
+}

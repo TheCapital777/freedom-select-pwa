@@ -12,10 +12,6 @@ import {
   type IconProps,
 } from "@/app/_components/icons/StatusIcons";
 
-/* Visible focus ring on every interactive element (MASTER.md checklist).
-   #FFBB1C is the existing --color-accent — no new colours introduced. */
-const FOCUS_RING = "focus-visible:[outline:2px_solid_#FFBB1C] focus-visible:[outline-offset:2px]";
-
 const ROLE_ROUTES: Record<Role, string> = {
   guest: "/",
   customer: "/products",
@@ -44,6 +40,27 @@ const ROLE_ICONS: Record<Role, (p: IconProps) => React.ReactElement> = {
   admin: ShieldIcon,
 };
 
+/**
+ * The header role switcher.
+ *
+ * Previously this was a native <select> with the glyph and the chevron
+ * absolutely positioned on top of it and pl-9/pr-7 padding reserving their
+ * space. That arrangement is only correct while the label fits the padding it
+ * was given, and on a 375px screen it did not: the brand lockup laid out 197px
+ * wide, the cart button took 44px, and the select was left roughly 70px to
+ * render about 116px of padded text. A <select> has no intrinsic minimum width,
+ * so instead of forcing the row to overflow it simply compressed, and the word
+ * "Customer" spilled out of its own padding box and printed across the cart
+ * glyph. That is the collision in the screenshot.
+ *
+ * Now the pill is a flex row — glyph, label, chevron — and the <select> is a
+ * transparent layer over the whole thing. Flex children cannot overlap, so the
+ * failure mode is gone by construction rather than by having picked better
+ * padding. The label is fixed-width and truncates, so the pill is also the same
+ * size for every role: a control that resizes under your finger as you use it
+ * was the other half of the problem. Styles live in globals.css under
+ * "Role pill".
+ */
 export default function RoleSwitcher() {
   const { role, setRole } = useRoleStore();
   const router = useRouter();
@@ -56,28 +73,18 @@ export default function RoleSwitcher() {
   }
 
   return (
-    <div className="relative flex items-center flex-shrink-0">
-      {/* Current-role glyph — decorative, the selected word carries the meaning.
-          Drawn on a 24px artboard but rendered at 20 so it sits optically with
-          11px text and the whole pill still fits beside the logo at 375px. */}
-      <RoleIcon
-        size={20}
-        className="absolute left-2.5 pointer-events-none"
-        style={{ color: "#FFBB1C" }}
-      />
+    <div className="role-pill">
+      {/* Decorative: the word beside it carries the meaning. Drawn on a 24px
+          artboard, rendered at 18 so it sits optically with 11px text. */}
+      <RoleIcon size={18} aria-hidden="true" />
+      <span className="role-pill-label" aria-hidden="true">
+        {ROLE_LABELS[role]}
+      </span>
+      <ChevronDownIcon size={14} aria-hidden="true" />
       <select
         value={role}
         onChange={handleChange}
         aria-label={"Switch role, currently " + ROLE_LABELS[role]}
-        /* Was px-3 py-1.5 text-xs — a 32px tall target. Now 44px. */
-        className={"text-[11px] font-semibold pl-9 pr-7 rounded-full border cursor-pointer appearance-none min-h-11 " + FOCUS_RING}
-        style={{
-          background: "rgba(255,187,28,0.1)",
-          borderColor: "rgba(255,187,28,0.3)",
-          color: "#FFBB1C",
-          height: "44px",
-          transition: "background 200ms cubic-bezier(0.4,0,0.2,1), border-color 200ms cubic-bezier(0.4,0,0.2,1)",
-        }}
       >
         {(Object.entries(ROLE_LABELS) as [Role, string][]).map(([r, label]) => (
           <option key={r} value={r} style={{ background: "#161616", color: "#F0F0F0" }}>
@@ -85,12 +92,6 @@ export default function RoleSwitcher() {
           </option>
         ))}
       </select>
-      {/* appearance-none removed the native affordance; put one back. */}
-      <ChevronDownIcon
-        size={16}
-        className="absolute right-2.5 pointer-events-none"
-        style={{ color: "#FFBB1C" }}
-      />
     </div>
   );
 }

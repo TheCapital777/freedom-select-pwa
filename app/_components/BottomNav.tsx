@@ -86,7 +86,7 @@ export default function BottomNav() {
         zIndex: 50,
         display: "flex",
         alignItems: "stretch",
-        height: "66px",
+        height: "72px",
         background: "rgba(8,8,8,0.98)",
         borderTop: "1px solid rgba(255,255,255,0.07)",
         backdropFilter: "blur(24px)",
@@ -124,10 +124,10 @@ export default function BottomNav() {
                 <span
                   aria-hidden="true"
                   style={{
-                    position: "absolute", top: "-4px", right: "-7px",
-                    minWidth: "16px", height: "16px",
+                    position: "absolute", top: "-6px", right: "-9px",
+                    minWidth: "19px", height: "19px",
                     background: "#FFBB1C", color: "#0A0A0A",
-                    borderRadius: "8px", fontSize: "9px", fontWeight: 900,
+                    borderRadius: "var(--radius-pill)", fontSize: "12px", fontWeight: 800, lineHeight: 1,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     padding: "0 3px",
                   }}
@@ -142,8 +142,10 @@ export default function BottomNav() {
             <span
               aria-hidden="true"
               style={{
-                fontSize: "9.5px", fontWeight: 600,
-                letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: 1,
+                fontSize: "12px", fontWeight: 600,
+                letterSpacing: "0.01em", lineHeight: 1,
+                maxWidth: "100%", overflow: "hidden",
+                textOverflow: "ellipsis", whiteSpace: "nowrap",
               }}
             >
               {tab.label}

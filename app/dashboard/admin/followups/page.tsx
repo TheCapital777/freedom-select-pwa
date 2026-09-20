@@ -22,7 +22,7 @@ const PRIORITY_CONFIG: Record<Priority, { label: string; color: string; bg: stri
 };
 
 const microLabel: React.CSSProperties = {
-  fontSize: "10px",
+  fontSize: "12px",
   fontWeight: 700,
   letterSpacing: "0.12em",
   textTransform: "uppercase",
@@ -138,10 +138,10 @@ export default function FollowUpsPage() {
       {/* Header */}
       <div style={{ marginBottom: "28px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap", marginBottom: "8px" }}>
-          <div style={{ width: "3px", height: "26px", background: "#a78bfa", borderRadius: "2px", flexShrink: 0 }} />
+          <div style={{ width: "3px", height: "26px", background: "#a78bfa", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
           <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>Follow Ups</h1>
           {openCount > 0 && (
-            <span style={{ padding: "4px 10px", background: highCount > 0 ? "rgba(239,68,68,0.15)" : "rgba(255,187,28,0.12)", color: highCount > 0 ? "#ef4444" : "#FFBB1C", borderRadius: "6px", fontSize: "12px", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ padding: "4px 10px", background: highCount > 0 ? "rgba(239,68,68,0.15)" : "rgba(255,187,28,0.12)", color: highCount > 0 ? "#ef4444" : "#FFBB1C", borderRadius: "var(--radius-plate)", fontSize: "12px", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}>
               {openCount} open{highCount > 0 ? ` · ${highCount} urgent` : ""}
             </span>
           )}
@@ -156,7 +156,7 @@ export default function FollowUpsPage() {
            its own — previously `outline: none` left the field with no focus cue. */
         border: `1px solid ${composerFocused ? "rgba(255,187,28,0.55)" : "#2A2A2A"}`,
         boxShadow: composerFocused ? "0 0 0 2px rgba(255,187,28,0.2)" : "none",
-        borderRadius: "16px", padding: "20px", marginBottom: "24px",
+        borderRadius: "var(--radius-card)", padding: "20px", marginBottom: "24px",
         transition: "border-color 0.18s, box-shadow 0.18s",
       }}>
         <label htmlFor="followup-text" style={{ ...microLabel, display: "block", marginBottom: "10px" }}>New follow-up</label>
@@ -171,7 +171,7 @@ export default function FollowUpsPage() {
           rows={3}
           style={{
             width: "100%", background: "none", border: "none", outline: "none",
-            color: "#F0F0F0", fontSize: "15px", fontWeight: 500, lineHeight: 1.6,
+            color: "#F0F0F0", fontSize: "16px", fontWeight: 500, lineHeight: 1.6,
             resize: "none", fontFamily: "inherit",
           }}
         />
@@ -184,11 +184,11 @@ export default function FollowUpsPage() {
                 {a.type === "image" ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={a.url} alt={a.name}
-                    style={{ width: "64px", height: "64px", objectFit: "cover", borderRadius: "8px", border: "1px solid #333", display: "block" }} />
+                    style={{ width: "64px", height: "64px", objectFit: "cover", borderRadius: "var(--radius-input)", border: "1px solid #333", display: "block" }} />
                 ) : (
-                  <div style={{ width: "64px", height: "64px", borderRadius: "8px", background: "#1E1E1E", border: "1px solid #2A2A2A", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "5px", padding: "0 4px" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 900, letterSpacing: "0.06em", color: "#FFBB1C" }}>{fileKind(a.name)}</span>
-                    <span style={{ fontSize: "9px", color: "#B0B0B0", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>{a.name}</span>
+                  <div style={{ width: "64px", height: "64px", borderRadius: "var(--radius-input)", background: "#1E1E1E", border: "1px solid #2A2A2A", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "5px", padding: "0 4px" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 900, letterSpacing: "0.06em", color: "#FFBB1C" }}>{fileKind(a.name)}</span>
+                    <span style={{ fontSize: "12px", color: "#B0B0B0", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>{a.name}</span>
                   </div>
                 )}
                 <button onClick={() => removeAttachment(i)} aria-label={`Remove attachment ${a.name}`}
@@ -213,7 +213,7 @@ export default function FollowUpsPage() {
                 <button key={p} onClick={() => setPriority(p)}
                   aria-pressed={active}
                   style={{
-                    padding: "7px 14px", minHeight: "44px", borderRadius: "8px",
+                    padding: "7px 14px", minHeight: "44px", borderRadius: "var(--radius-input)",
                     background: active ? cfg.bg : "transparent",
                     border: `1px solid ${active ? cfg.color + "66" : "#2A2A2A"}`,
                     color: active ? cfg.color : "#B0B0B0",
@@ -228,14 +228,14 @@ export default function FollowUpsPage() {
 
           {/* Attach file — a word, not a paperclip emoji */}
           <button onClick={() => fileRef.current?.click()}
-            style={{ minHeight: "44px", padding: "0 14px", borderRadius: "8px", background: "#1A1A1A", border: "1px solid #2A2A2A", cursor: "pointer", color: "#B0B0B0", fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+            style={{ minHeight: "44px", padding: "0 14px", borderRadius: "var(--radius-input)", background: "#1A1A1A", border: "1px solid #2A2A2A", cursor: "pointer", color: "#B0B0B0", fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
             Attach
           </button>
           <input ref={fileRef} type="file" multiple accept="*/*" onChange={handleFileChange} style={{ display: "none" }} />
 
           {/* Camera capture */}
           <button onClick={() => cameraRef.current?.click()}
-            style={{ minHeight: "44px", padding: "0 14px", borderRadius: "8px", background: "#1A1A1A", border: "1px solid #2A2A2A", cursor: "pointer", color: "#B0B0B0", fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+            style={{ minHeight: "44px", padding: "0 14px", borderRadius: "var(--radius-input)", background: "#1A1A1A", border: "1px solid #2A2A2A", cursor: "pointer", color: "#B0B0B0", fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
             Photo
           </button>
           <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={handleFileChange} style={{ display: "none" }} />
@@ -245,7 +245,7 @@ export default function FollowUpsPage() {
           {/* Add button */}
           <button onClick={addItem} disabled={!text.trim()}
             style={{
-              padding: "0 24px", minHeight: "44px", borderRadius: "10px",
+              padding: "0 24px", minHeight: "44px", borderRadius: "var(--radius-input)",
               background: text.trim() ? "#FFBB1C" : "#1E1E1E",
               color: text.trim() ? "#0C0C0C" : "#6B6B6B",
               fontWeight: 800, fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase",
@@ -263,7 +263,7 @@ export default function FollowUpsPage() {
           <button key={f} onClick={() => setFilter(f)}
             aria-pressed={filter === f}
             style={{
-              padding: "0 18px", minHeight: "44px", borderRadius: "8px",
+              padding: "0 18px", minHeight: "44px", borderRadius: "var(--radius-input)",
               background: filter === f ? "rgba(167,139,250,0.12)" : "transparent",
               border: `1px solid ${filter === f ? "rgba(167,139,250,0.4)" : "#2A2A2A"}`,
               color: filter === f ? "#a78bfa" : "#B0B0B0",
@@ -277,9 +277,9 @@ export default function FollowUpsPage() {
 
       {/* Follow-up list */}
       {filtered.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "44px 20px", background: "#161616", border: "1px solid #242424", borderRadius: "14px" }}>
-          <div aria-hidden style={{ width: "36px", height: "3px", borderRadius: "2px", background: "#22c55e", margin: "0 auto 16px" }} />
-          <p style={{ fontSize: "15px", fontWeight: 700, color: "#F0F0F0" }}>All clear</p>
+        <div style={{ textAlign: "center", padding: "44px 20px", background: "#161616", border: "1px solid #242424", borderRadius: "var(--radius-card)" }}>
+          <div aria-hidden style={{ width: "36px", height: "3px", borderRadius: "var(--radius-stamp)", background: "#22c55e", margin: "0 auto 16px" }} />
+          <p style={{ fontSize: "16px", fontWeight: 700, color: "#F0F0F0" }}>All clear</p>
           <p style={{ fontSize: "13px", marginTop: "6px", color: "#B0B0B0" }}>No {filter === "done" ? "completed" : "open"} follow-ups</p>
         </div>
       ) : (
@@ -298,7 +298,7 @@ export default function FollowUpsPage() {
                   style={{
                     background: "#161616",
                     border: `1px solid ${item.done ? "#1E1E1E" : "#242424"}`,
-                    borderRadius: "14px",
+                    borderRadius: "var(--radius-card)",
                     overflow: "hidden",
                   }}>
                   {/* Priority accent line */}
@@ -317,7 +317,7 @@ export default function FollowUpsPage() {
                           display: "flex", alignItems: "center", justifyContent: "center",
                         }}>
                         <span style={{
-                          width: "22px", height: "22px", borderRadius: "6px",
+                          width: "22px", height: "22px", borderRadius: "var(--radius-plate)",
                           border: `2px solid ${item.done ? "#22c55e" : cfg.color + "88"}`,
                           background: item.done ? "rgba(34,197,94,0.15)" : "transparent",
                           display: "flex", alignItems: "center", justifyContent: "center",
@@ -329,7 +329,7 @@ export default function FollowUpsPage() {
 
                       {/* Text */}
                       <p style={{
-                        flex: 1, minWidth: 0, fontSize: "15px", fontWeight: 600, lineHeight: 1.5,
+                        flex: 1, minWidth: 0, fontSize: "16px", fontWeight: 600, lineHeight: 1.5,
                         /* was #555 (2.4:1 on the card) when done — now text-dim */
                         color: item.done ? "#B0B0B0" : "#F0F0F0",
                         textDecoration: item.done ? "line-through" : "none",
@@ -338,7 +338,7 @@ export default function FollowUpsPage() {
                       {/* Delete — was #2A2A2A (1.1:1), effectively invisible */}
                       <button onClick={() => deleteItem(item.id)}
                         aria-label="Delete follow-up"
-                        style={{ width: "44px", height: "44px", marginTop: "-11px", marginRight: "-11px", background: "none", border: "none", cursor: "pointer", color: "#B0B0B0", fontSize: "20px", lineHeight: 1, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        style={{ width: "44px", height: "44px", marginTop: "-11px", marginRight: "-11px", background: "none", border: "none", cursor: "pointer", color: "#B0B0B0", fontSize: "22px", lineHeight: 1, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         ×
                       </button>
                     </div>
@@ -350,10 +350,10 @@ export default function FollowUpsPage() {
                           a.type === "image" ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img key={i} src={a.url} alt={a.name}
-                              style={{ width: "56px", height: "56px", objectFit: "cover", borderRadius: "8px", border: "1px solid #2A2A2A", display: "block" }} />
+                              style={{ width: "56px", height: "56px", objectFit: "cover", borderRadius: "var(--radius-input)", border: "1px solid #2A2A2A", display: "block" }} />
                           ) : (
-                            <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px", background: "#1E1E1E", borderRadius: "8px", border: "1px solid #2A2A2A", maxWidth: "100%" }}>
-                              <span style={{ fontSize: "10px", fontWeight: 900, letterSpacing: "0.06em", color: "#FFBB1C", flexShrink: 0 }}>{fileKind(a.name)}</span>
+                            <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px", background: "#1E1E1E", borderRadius: "var(--radius-input)", border: "1px solid #2A2A2A", maxWidth: "100%" }}>
+                              <span style={{ fontSize: "12px", fontWeight: 900, letterSpacing: "0.06em", color: "#FFBB1C", flexShrink: 0 }}>{fileKind(a.name)}</span>
                               <span style={{ fontSize: "12px", color: "#B0B0B0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.name}</span>
                             </div>
                           )
@@ -363,8 +363,8 @@ export default function FollowUpsPage() {
 
                     {/* Footer row */}
                     <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", paddingLeft: "34px" }}>
-                      <span style={{ padding: "4px 10px", borderRadius: "6px", background: cfg.bg, color: cfg.color, fontSize: "11px", fontWeight: 700 }}>
-                        ● {cfg.label}
+                      <span style={{ padding: "4px 10px", borderRadius: "var(--radius-plate)", background: cfg.bg, color: cfg.color, fontSize: "12px", fontWeight: 700 }}>
+                        <i className="dot" aria-hidden="true" />{cfg.label}
                       </span>
                       <span style={{ fontSize: "12px", color: "#B0B0B0", fontVariantNumeric: "tabular-nums" }}>{date}</span>
                     </div>

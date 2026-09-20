@@ -54,7 +54,7 @@ export default function LoginPage() {
       </div>
 
       <p style={{
-        fontSize: "11px", fontWeight: 600,
+        fontSize: "12px", fontWeight: 600,
         letterSpacing: "0.22em", textTransform: "uppercase",
         color: "#3A3A3A", marginBottom: "40px",
       }}>
@@ -75,14 +75,14 @@ export default function LoginPage() {
               padding: "22px 20px",
               background: "#161616",
               border: "1px solid #242424",
-              borderRadius: "14px",
+              borderRadius: "var(--radius-card)",
               cursor: "pointer", textAlign: "left",
             }}
           >
             <div style={{
-              width: "56px", height: "56px", borderRadius: "14px",
+              width: "56px", height: "56px", borderRadius: "var(--radius-card)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "28px", flexShrink: 0,
+              fontSize: "30px", flexShrink: 0,
               background: `${r.color}15`, border: `1px solid ${r.color}28`,
             }}>
               <r.Icon size={26} />
@@ -97,7 +97,7 @@ export default function LoginPage() {
       </div>
 
       <p style={{
-        fontSize: "11px", fontWeight: 500,
+        fontSize: "12px", fontWeight: 500,
         letterSpacing: "0.18em", textTransform: "uppercase",
         color: "#2A2A2A", marginTop: "48px",
       }}>

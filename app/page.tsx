@@ -36,7 +36,7 @@ export default function HomePage() {
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.05, ease: EASE }}
-          style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.26em", textTransform: "uppercase", color: "#3A3A3A", marginBottom: "2rem" }}
+          style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.26em", textTransform: "uppercase", color: "#3A3A3A", marginBottom: "2rem" }}
         >
           Arusha · Tanzania
         </motion.p>
@@ -80,7 +80,7 @@ export default function HomePage() {
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.32, ease: EASE }}
-          style={{ fontSize: "11px", color: "#3A3A3A", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "2.8rem" }}
+          style={{ fontSize: "12px", color: "#3A3A3A", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "2.8rem" }}
         >
           Build · Source · Deliver
         </motion.p>
@@ -94,18 +94,18 @@ export default function HomePage() {
           <button onClick={shopNow} style={{
             flex: 1, padding: "18px 0",
             background: "#FFBB1C", color: "#0C0C0C",
-            fontWeight: 800, fontSize: "11px",
+            fontWeight: 800, fontSize: "12px",
             letterSpacing: "0.16em", textTransform: "uppercase",
-            border: "none", borderRadius: "6px", cursor: "pointer",
+            border: "none", borderRadius: "var(--radius-plate)", cursor: "pointer",
           }}>
             Shop Now
           </button>
           <Link href="/login" style={{
             padding: "18px 28px",
             border: "1px solid rgba(255,255,255,0.1)", color: "#B0B0B0",
-            fontWeight: 600, fontSize: "11px",
+            fontWeight: 600, fontSize: "12px",
             letterSpacing: "0.12em", textTransform: "uppercase",
-            textDecoration: "none", borderRadius: "6px",
+            textDecoration: "none", borderRadius: "var(--radius-plate)",
             display: "flex", alignItems: "center", whiteSpace: "nowrap",
           }}>
             Login

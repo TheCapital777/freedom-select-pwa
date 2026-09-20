@@ -81,11 +81,11 @@ export default function ProductDetailPage() {
           style={{
             position: "absolute", top: "16px", left: "16px",
             background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.1)",
-            color: "#B0B0B0", fontSize: "11px", fontWeight: 600,
+            color: "#B0B0B0", fontSize: "12px", fontWeight: 600,
             letterSpacing: "0.1em", textTransform: "uppercase",
             padding: "0 14px", minHeight: "44px", minWidth: "44px",
             display: "inline-flex", alignItems: "center", gap: "6px",
-            borderRadius: "6px", cursor: "pointer",
+            borderRadius: "var(--radius-plate)", cursor: "pointer",
           }}
         >
           <ArrowLeftIcon size={14} />
@@ -97,8 +97,8 @@ export default function ProductDetailPage() {
           <span style={{
             position: "absolute", top: "16px", right: "16px",
             background: "#FFBB1C", color: "#0C0C0C",
-            fontSize: "8px", fontWeight: 800, letterSpacing: "0.1em",
-            textTransform: "uppercase", padding: "4px 8px", borderRadius: "4px",
+            fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em",
+            textTransform: "uppercase", padding: "4px 8px", borderRadius: "var(--radius-stamp)",
           }}>
             <StarIcon size={10} style={{ verticalAlign: "-1px", marginRight: "3px" }} />
             Featured
@@ -112,16 +112,16 @@ export default function ProductDetailPage() {
         {/* Vendor + stock */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
           <VendorMark name={vendor?.name ?? ""} size={20} />
-          <p style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#444" }}>
+          <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#B0B0B0" }}>
             {vendor?.name}
           </p>
           <span style={{
-            marginLeft: "auto", fontSize: "9px", fontWeight: 700,
+            marginLeft: "auto", fontSize: "12px", fontWeight: 700,
             letterSpacing: "0.1em", textTransform: "uppercase",
             background: "rgba(34,197,94,0.08)", color: "#22c55e",
-            padding: "3px 8px", borderRadius: "4px",
+            padding: "3px 8px", borderRadius: "var(--radius-stamp)",
           }}>
-            ● {product.stock} {product.unit}s in stock
+            <i className="dot" aria-hidden="true" />{product.stock} {product.unit}s in stock
           </span>
         </div>
 
@@ -133,7 +133,7 @@ export default function ProductDetailPage() {
         {/* Price */}
         <p style={{ fontWeight: 900, fontSize: "24px", color: "#FFBB1C", marginBottom: "2px", letterSpacing: "-0.02em" }}>
           {formatTZS(product.price)}
-          <span style={{ fontSize: "13px", fontWeight: 600, color: "#444", marginLeft: "6px" }}>
+          <span style={{ fontSize: "13px", fontWeight: 600, color: "#B0B0B0", marginLeft: "6px" }}>
             / {product.unit}
           </span>
         </p>
@@ -144,9 +144,9 @@ export default function ProductDetailPage() {
         </p>
 
         {/* Specs */}
-        <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "20px" }}>
+        <div style={{ borderRadius: "var(--radius-input)", overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "20px" }}>
           <div style={{ padding: "10px 14px", background: "#141414", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <p style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#444" }}>
+            <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#B0B0B0" }}>
               Specifications
             </p>
           </div>
@@ -156,7 +156,7 @@ export default function ProductDetailPage() {
               padding: "11px 14px", background: "#111",
               borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
             }}>
-              <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>
+              <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>
                 {key}
               </span>
               <span style={{ fontSize: "12px", fontWeight: 700, color: "#C0C0C0" }}>{val}</span>
@@ -166,18 +166,18 @@ export default function ProductDetailPage() {
 
         {/* Qty + Total */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", background: "#141414", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", background: "#141414", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "var(--radius-input)" }}>
             <button
               onClick={() => setQty(Math.max(1, qty - 1))}
-              style={{ width: "28px", height: "28px", background: "#1E1E1E", border: "none", color: "#FFBB1C", fontWeight: 900, fontSize: "18px", borderRadius: "6px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ width: "28px", height: "28px", background: "#1E1E1E", border: "none", color: "#FFBB1C", fontWeight: 900, fontSize: "17px", borderRadius: "var(--radius-plate)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
             >−</button>
-            <span style={{ fontWeight: 900, fontSize: "15px", minWidth: "20px", textAlign: "center" }}>{qty}</span>
+            <span style={{ fontWeight: 900, fontSize: "16px", minWidth: "20px", textAlign: "center" }}>{qty}</span>
             <button
               onClick={() => setQty(qty + 1)}
-              style={{ width: "28px", height: "28px", background: "#1E1E1E", border: "none", color: "#FFBB1C", fontWeight: 900, fontSize: "18px", borderRadius: "6px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ width: "28px", height: "28px", background: "#1E1E1E", border: "none", color: "#FFBB1C", fontWeight: 900, fontSize: "17px", borderRadius: "var(--radius-plate)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
             >+</button>
           </div>
-          <p style={{ fontWeight: 900, fontSize: "18px", color: "#FFBB1C", flex: 1, textAlign: "right", letterSpacing: "-0.02em" }}>
+          <p style={{ fontWeight: 900, fontSize: "17px", color: "#FFBB1C", flex: 1, textAlign: "right", letterSpacing: "-0.02em" }}>
             {formatTZS(product.price * qty)}
           </p>
         </div>
@@ -190,9 +190,9 @@ export default function ProductDetailPage() {
               flex: 1, padding: "15px 0",
               background: added ? "#22c55e" : "#FFBB1C",
               color: "#0C0C0C", border: "none", cursor: "pointer",
-              fontWeight: 800, fontSize: "11px",
+              fontWeight: 800, fontSize: "12px",
               letterSpacing: "0.16em", textTransform: "uppercase",
-              borderRadius: "6px",
+              borderRadius: "var(--radius-plate)",
               transition: "background 0.2s ease",
             }}
           >
@@ -213,9 +213,9 @@ export default function ProductDetailPage() {
               background: "rgba(37,211,102,0.08)",
               border: "1px solid rgba(37,211,102,0.2)",
               color: "#25D366",
-              fontWeight: 700, fontSize: "11px",
+              fontWeight: 700, fontSize: "12px",
               letterSpacing: "0.1em", textTransform: "uppercase",
-              textDecoration: "none", borderRadius: "6px",
+              textDecoration: "none", borderRadius: "var(--radius-plate)",
               display: "flex", alignItems: "center", gap: "6px",
             }}
           >

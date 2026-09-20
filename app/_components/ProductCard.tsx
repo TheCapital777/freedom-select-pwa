@@ -36,6 +36,11 @@ const ShareIcon = () => (
   </svg>
 );
 
+/* Below this many units, the count is worth showing on the tile. Chosen against
+   the real catalogue (stock runs 45-500) so the badge means "short" rather than
+   appearing on everything, which is how scarcity cues stop being believed. */
+const LOW_STOCK = 50;
+
 export default function ProductCard({ product, index = 0 }: Props) {
   const addItem = useCartStore((s) => s.addItem);
   const { addItem: saveWish, removeItem: removeWish, hasItem } = useWishlistStore();
@@ -98,7 +103,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
   }
 
   const iconBtn: React.CSSProperties = {
-    width: "32px", height: "32px", borderRadius: "6px",
+    width: "32px", height: "32px", borderRadius: "var(--radius-plate)",
     display: "flex", alignItems: "center", justifyContent: "center",
     flexShrink: 0, border: "1px solid #2A2A2A",
     background: "#0C0C0C", cursor: "pointer",
@@ -135,14 +140,14 @@ export default function ProductCard({ product, index = 0 }: Props) {
             <span style={{
               inset: "8px 8px auto auto",
               background: "#FFBB1C", color: "#0C0C0C",
-              fontSize: "8px", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
-              padding: "2px 6px", borderRadius: "3px",
+              fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
+              padding: "2px 6px", borderRadius: "var(--radius-stamp)",
             }}>Hot</span>
           )}
 
           {!product.in_stock && (
             <div style={{ background: "rgba(0,0,0,0.7)" }}>
-              <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#FF6B00" }}>Out of Stock</span>
+              <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#FF6B00" }}>Out of Stock</span>
             </div>
           )}
         </div>
@@ -150,29 +155,39 @@ export default function ProductCard({ product, index = 0 }: Props) {
         {/* Card body */}
         <div className="tile-info">
           <p style={{
-            fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
-            color: "#383838", marginBottom: "3px",
+            fontSize: "12px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
+            color: "#B0B0B0", marginBottom: "4px",
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
           }}>{vendor?.name}</p>
 
           <h3 style={{
-            fontSize: "12px", fontWeight: 700, lineHeight: 1.3, color: "#D0D0D0",
-            marginBottom: "10px",
+            fontSize: "15px", fontWeight: 700, lineHeight: 1.32, color: "#F0F0F0",
+            letterSpacing: "-0.01em", marginBottom: "10px", minHeight: "40px",
             display: "-webkit-box", WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical" as const, overflow: "hidden",
           }}>{product.name}</h3>
 
+          {/* Availability — rendered only when it carries information.
+              Never colour alone: each pill keeps its word. */}
+          {(!product.in_stock || product.stock === 0) ? (
+            <span className="pill pill-out" style={{ marginBottom: "10px" }}>Sold out</span>
+          ) : product.stock < LOW_STOCK ? (
+            <span className="pill pill-low" style={{ marginBottom: "10px" }}>
+              {product.stock} {product.unit}{product.stock === 1 ? "" : "s"} left
+            </span>
+          ) : null}
+
           {/* Price */}
-          <div style={{ marginBottom: "10px" }}>
-            <p style={{ fontSize: "14px", fontWeight: 900, color: "#FFBB1C", lineHeight: 1, letterSpacing: "-0.02em" }}>
+          <div style={{ marginBottom: "12px" }}>
+            <p style={{ fontSize: "17px", fontWeight: 800, color: "#FFBB1C", lineHeight: 1, letterSpacing: "-0.02em" }}>
               {formatTZS(product.price)}
             </p>
-            <p style={{ fontSize: "8px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#333", marginTop: "2px" }}>
+            <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#B0B0B0", marginTop: "4px" }}>
               / {product.unit}
             </p>
           </div>
 
-          {/* Action buttons row: ❤ · share · + */}
+          {/* Action buttons row: wishlist, share, add to cart */}
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
 
             {/* Wishlist */}
@@ -211,7 +226,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
               title="Add to cart"
               aria-label={added ? `${product.name} added to cart` : `Add ${product.name} to cart`}
               style={{
-                width: "32px", height: "32px", borderRadius: "6px",
+                width: "32px", height: "32px", borderRadius: "var(--radius-plate)",
                 background: added ? "#22c55e" : "#FFBB1C",
                 color: "#0C0C0C", fontSize: "16px", fontWeight: 900,
                 display: "flex", alignItems: "center", justifyContent: "center",

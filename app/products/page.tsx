@@ -1,10 +1,13 @@
 "use client";
 import { useState, useMemo } from "react";
-import { PRODUCTS } from "@/lib/mockData";
+// The catalogue reads the directory store, not the mockData constant, so a product
+// an admin adds, removes or marks out of stock shows up in the shop immediately.
+import { useDirectoryStore } from "@/lib/directoryStore";
 import ProductCard from "../_components/ProductCard";
 import { SearchIcon } from "@/app/_components/icons/StatusIcons";
 
 export default function ProductsPage() {
+  const PRODUCTS = useDirectoryStore((s) => s.products);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"default" | "asc" | "desc">("default");
 
@@ -25,10 +28,10 @@ export default function ProductsPage() {
       {/* Header */}
       <div style={{ padding: "20px 20px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
-          <span style={{ width: "3px", height: "16px", background: "#FFBB1C", borderRadius: "2px", display: "block" }} />
-          <h1 style={{ fontWeight: 900, fontSize: "18px", letterSpacing: "-0.01em" }}>Marketplace</h1>
+          <span style={{ width: "3px", height: "16px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", display: "block" }} />
+          <h1 style={{ fontWeight: 900, fontSize: "17px", letterSpacing: "-0.01em" }}>Marketplace</h1>
         </div>
-        <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A", paddingLeft: "13px" }}>
+        <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A", paddingLeft: "13px" }}>
           {filtered.length} products · Arusha
         </p>
       </div>
@@ -52,7 +55,7 @@ export default function ProductsPage() {
               width: "100%", padding: "12px 14px 12px 38px",
               background: "#141414",
               border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "10px",
+              borderRadius: "var(--radius-input)",
               fontSize: "13px", color: "#F0F0F0", outline: "none",
               boxSizing: "border-box",
             }}
@@ -69,8 +72,8 @@ export default function ProductsPage() {
             padding: "7px 12px",
             background: "#141414",
             border: "1px solid rgba(255,255,255,0.07)",
-            borderRadius: "8px",
-            fontSize: "11px", fontWeight: 700,
+            borderRadius: "var(--radius-input)",
+            fontSize: "12px", fontWeight: 700,
             letterSpacing: "0.07em", textTransform: "uppercase",
             color: "#5A5A5A", outline: "none", cursor: "pointer",
           }}
@@ -87,7 +90,7 @@ export default function ProductsPage() {
           <div style={{ textAlign: "center", paddingTop: "60px", paddingBottom: "60px" }}>
             <SearchIcon size={40} style={{ marginBottom: "12px", color: "#6B6B6B" }} label="No results" />
             <p style={{ fontWeight: 800, fontSize: "14px", letterSpacing: "-0.01em", marginBottom: "6px" }}>No results</p>
-            <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>Try a different search or category</p>
+            <p style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3A3A3A" }}>Try a different search or category</p>
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>

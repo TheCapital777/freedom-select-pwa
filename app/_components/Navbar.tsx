@@ -26,39 +26,31 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Site header"
+      className="glass"
       style={{
         position: "sticky", top: 0, zIndex: 50,
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 20px",
-        background: "rgba(10,10,10,0.97)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        height: "88px",
+        gap: "12px",
+        padding: "0 16px",
+        borderRadius: 0,
+        borderTop: 0, borderLeft: 0, borderRight: 0,
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        boxShadow: "none",
       }}
     >
-      {/* Logo — crop into the visible content using overflow:hidden */}
+      {/* Logo — portrait art cropped to a letterbox. Sizing lives in
+          globals.css so the width shrinks with the viewport; hard-coding it
+          here at 197px is what squeezed the role pill off the row. */}
       <Link
         href="/"
         aria-label="Freedom Select — home"
-        className={"cursor-pointer " + FOCUS_RING}
-        style={{ display: "block", overflow: "hidden", height: "88px", flexShrink: 0 }}
+        className={"brand-lockup cursor-pointer " + FOCUS_RING}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/logo.png"
-          alt="Freedom Select"
-          style={{
-            height: "280px",
-            width: "auto",
-            marginTop: "-92px",
-            display: "block",
-            filter: "drop-shadow(0 2px 12px rgba(255,187,28,0.15))",
-          }}
-        />
+        <img src="/logo.png" alt="Freedom Select" />
       </Link>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
         <RoleSwitcher />
         <Link
           href="/cart"
@@ -73,7 +65,7 @@ export default function Navbar() {
             position: "relative",
             display: "flex", alignItems: "center", justifyContent: "center",
             width: "44px", height: "44px", flexShrink: 0,
-            borderRadius: "8px",
+            borderRadius: "var(--radius-input)",
             color: "#B0B0B0",
             transition: "color 200ms cubic-bezier(0.4,0,0.2,1)",
           }}
@@ -84,11 +76,14 @@ export default function Navbar() {
               aria-hidden="true"
               style={{
                 position: "absolute",
-                top: "3px", right: "3px",
-                width: "17px", height: "17px",
+                top: "2px", right: "2px",
+                /* Grown with the type: this held 9px text in a 17px circle.
+                   minWidth + padding so "9+" is not clipped the way a fixed
+                   square would clip it. */
+                minWidth: "20px", height: "20px", padding: "0 4px",
                 background: "#FFBB1C", color: "#0A0A0A",
-                borderRadius: "50%",
-                fontSize: "9px", fontWeight: 900,
+                borderRadius: "var(--radius-pill)",
+                fontSize: "12px", fontWeight: 800, lineHeight: 1,
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}
             >

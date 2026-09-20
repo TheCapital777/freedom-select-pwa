@@ -1,4 +1,4 @@
-import type { Product, Vendor, Order, DeliveryTask, Category } from "./types";
+import type { Product, Vendor, Order, DeliveryTask, Category, Transporter } from "./types";
 
 export const CATEGORIES: Category[] = [
   { id: "all",                label: "All", active: true,  comingSoon: false },
@@ -421,3 +421,39 @@ export function getProductsByVendor(vendorId: string) {
 export function getOrdersByVendor(vendorId: string) {
   return ORDERS.filter((o) => o.items.some((i) => i.vendor_id === vendorId));
 }
+
+export const TRANSPORTERS: Transporter[] = [
+  {
+    id: "trans-1",
+    name: "Emmanuel Laizer",
+    phone: "0754 210 880",
+    vehicle: "canter",
+    plate: "T 412 DGK",
+    capacity: "Up to 3 tonnes, covered bed",
+    region: "Arusha CBD",
+    status: "active",
+    trips_completed: 128,
+  },
+  {
+    id: "trans-2",
+    name: "Hassan Mwinyi",
+    phone: "0712 664 190",
+    vehicle: "lorry",
+    plate: "T 907 BXR",
+    capacity: "Up to 10 tonnes, ballast and sand",
+    region: "Njiro",
+    status: "active",
+    trips_completed: 74,
+  },
+  {
+    id: "trans-3",
+    name: "Godfrey Sanga",
+    phone: "0768 335 022",
+    vehicle: "pickup",
+    plate: "T 155 AQZ",
+    capacity: "Up to 1 tonne, cement and tiles",
+    region: "Sakina",
+    status: "pending",
+    trips_completed: 0,
+  },
+];

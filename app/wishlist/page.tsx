@@ -38,7 +38,7 @@ export default function WishlistPage() {
         <Link
           href="/products"
           className={"cursor-pointer " + FOCUS_RING}
-          style={{ marginTop: "8px", padding: "16px 36px", minHeight: "44px", display: "inline-flex", alignItems: "center", background: "#FFBB1C", color: "#0C0C0C", fontWeight: 800, fontSize: "12px", letterSpacing: "0.14em", textTransform: "uppercase", textDecoration: "none", borderRadius: "8px" }}
+          style={{ marginTop: "8px", padding: "16px 36px", minHeight: "44px", display: "inline-flex", alignItems: "center", background: "#FFBB1C", color: "#0C0C0C", fontWeight: 800, fontSize: "12px", letterSpacing: "0.14em", textTransform: "uppercase", textDecoration: "none", borderRadius: "var(--radius-input)" }}
         >
           Browse Products
         </Link>
@@ -51,7 +51,7 @@ export default function WishlistPage() {
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>Wishlist</h1>
         <span className="badge-construction">{items.length} saved</span>
       </div>
@@ -66,7 +66,7 @@ export default function WishlistPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: 28 }}
               transition={{ delay: i * 0.05 }}
-              style={{ background: "#161616", border: "1px solid #242424", borderRadius: "12px", padding: "20px 20px 18px" }}
+              style={{ background: "#161616", border: "1px solid #242424", borderRadius: "var(--radius-card)", padding: "20px 20px 18px" }}
             >
               {/* Name + remove */}
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "6px" }}>
@@ -79,7 +79,7 @@ export default function WishlistPage() {
                       width: "44px", height: "44px", flexShrink: 0,
                       display: "flex", alignItems: "center", justifyContent: "center",
                       background: "#141414", border: "1px solid #2A2A2A",
-                      borderRadius: "8px", color: "#B0B0B0",
+                      borderRadius: "var(--radius-input)", color: "#B0B0B0",
                     }}
                   >
                     <PackageIcon size={24} />
@@ -98,7 +98,7 @@ export default function WishlistPage() {
                     width: "44px", height: "44px", flexShrink: 0,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     background: "none", border: "none", cursor: "pointer",
-                    borderRadius: "8px", color: "#B0B0B0",
+                    borderRadius: "var(--radius-input)", color: "#B0B0B0",
                     marginTop: "-10px", marginRight: "-10px",
                     transition: "color 200ms cubic-bezier(0.4,0,0.2,1)",
                   }}
@@ -110,7 +110,7 @@ export default function WishlistPage() {
               {/* Price + Add to cart */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", marginTop: "16px" }}>
                 <div>
-                  <p style={{ fontWeight: 900, fontSize: "20px", color: "#FFBB1C", letterSpacing: "-0.02em" }}>{formatTZS(item.price)}</p>
+                  <p style={{ fontWeight: 900, fontSize: "22px", color: "#FFBB1C", letterSpacing: "-0.02em" }}>{formatTZS(item.price)}</p>
                   <p style={{ fontSize: "12px", color: "#B0B0B0", marginTop: "2px" }}>per {item.unit}</p>
                 </div>
                 <button
@@ -125,7 +125,7 @@ export default function WishlistPage() {
                     color: "#0C0C0C",
                     fontWeight: 800, fontSize: "12px",
                     letterSpacing: "0.1em", textTransform: "uppercase",
-                    border: "none", borderRadius: "8px", cursor: "pointer",
+                    border: "none", borderRadius: "var(--radius-input)", cursor: "pointer",
                     transition: "background 200ms cubic-bezier(0.4,0,0.2,1)",
                     flexShrink: 0,
                   }}
@@ -146,7 +146,7 @@ export default function WishlistPage() {
           display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
           marginTop: "12px", minHeight: "44px",
           fontSize: "13px", fontWeight: 600, color: "#B0B0B0", textDecoration: "none",
-          borderRadius: "8px",
+          borderRadius: "var(--radius-input)",
         }}
       >
         <PlusIcon size={24} />

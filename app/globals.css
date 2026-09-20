@@ -43,11 +43,38 @@
   --ease:      cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out:  cubic-bezier(0, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Radius scale. The reference UI runs 16-24px on everything; that reads soft
+     and premium but it would sand the industrial edge off this brand. So: soft
+     on containers the hand touches (panels, sheets, pills), hard on the plates
+     and badges that are meant to look stamped. */
+  --radius-pill:   999px;
+  --radius-panel:  20px;   /* sheets, modals, big containers */
+  --radius-card:   18px;   /* product tiles, stat cards */
+  --radius-input:  12px;   /* inputs, secondary buttons */
+  --radius-plate:  8px;    /* stamped plates and badges */
+  --radius-stamp:  4px;    /* deliberately hard — the industrial edge lives here */
+
+  /* Elevation. Two layers, always: a black drop for depth and an amber bloom
+     for the light source. The bloom is what stops a dark UI looking flat. */
+  --shadow-1: 0 2px 8px rgba(0,0,0,0.40);
+  --shadow-2: 0 8px 28px rgba(0,0,0,0.50);
+  --shadow-3: 0 16px 48px rgba(0,0,0,0.62);
+  --bloom-sm: 0 0 12px rgba(255,187,28,0.14);
+  --bloom-md: 0 0 24px rgba(255,187,28,0.22);
+  --bloom-lg: 0 0 40px rgba(255,187,28,0.30);
 }
 
 /* ─── RESET ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Chrome on Android inflates text inside blocks it decides are body copy,
+     which silently blows out fixed-width controls like the header role pill.
+     Opt out; every size in this sheet is already chosen for mobile. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 /* ─── BASE ─── */
 body {
@@ -182,7 +209,7 @@ body {
 
 /* Industrial label */
 .label-industrial {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -191,7 +218,7 @@ body {
 
 /* Accent label */
 .label-accent {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -222,9 +249,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 10px;
-  border-radius: 3px;
-  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: var(--radius-plate);
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -246,7 +273,7 @@ body {
 /* Plate border */
 .plate-border {
   border: 1px solid #2A2A2A;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   background: #1E1E1E;
   position: relative;
 }
@@ -291,6 +318,7 @@ body {
 
 /* Image frame — locked aspect ratio */
 .tile-image-frame {
+  border-radius: 0;
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -406,4 +434,320 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ════════════════════════════════════════
+   PREMIUM PASS
+   ────────────────────────────────────────
+   Techniques lifted from the reference UI in Desktop/UIupdates (a concert
+   ticketing site). Its CRAFT transfers; its palette does not. Deep indigo,
+   electric violet and neon cyan belong to a music event — this is a builders
+   merchant in Arusha selling cement, mabati and sand, and it is black and
+   safety yellow. So: the glass, the glow-on-select, the hairline list rows,
+   the tightened timings and the 4/8 spacing grid are taken. The colours are
+   not. Nothing below introduces a hue that was not already in @theme.
+   ════════════════════════════════════════ */
+
+/* ─── Glass ────────────────────────────────────────────────────────────────
+   The reference leans on backdrop-blur for every floating panel. It only reads
+   as glass if the fill is actually translucent — the header here was at 0.97,
+   which is a solid bar wearing a blur it cannot show. Around 0.7 is the point
+   where content passing underneath is legible as movement without turning into
+   noise behind the text.
+   Fallback matters: without backdrop-filter this must stay opaque enough to
+   keep text at 4.5:1, hence the @supports flip rather than a single value. */
+.glass {
+  background: rgba(18,18,18,0.92);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: var(--shadow-2);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(18,18,18,0.70);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(20px) saturate(140%);
+  }
+}
+.glass-panel { border-radius: var(--radius-panel); }
+
+/* ─── Ambient bloom ────────────────────────────────────────────────────────
+   A flat #0C0C0C page has no light source, which is most of why a dark UI can
+   look cheap. One very low-opacity amber wash at the top gives the page a
+   direction to be lit from. Kept under 0.07 — above that it turns the black
+   brown and the caution stripes stop reading as yellow-on-black.
+   position:fixed + -1 z-index so it never joins a stacking context or eats a
+   tap; pointer-events:none for the same reason. */
+.ambient-bloom {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(90% 60% at 50% -10%, rgba(255,187,28,0.065) 0%, rgba(255,187,28,0.02) 42%, transparent 72%),
+    radial-gradient(60% 40% at 88% 4%,  rgba(255,107,0,0.035)  0%, transparent 68%);
+}
+
+/* ─── Selected state ───────────────────────────────────────────────────────
+   The single best idea in the reference: a chosen row is not merely tinted, it
+   is ringed AND bloomed AND brightened, so it survives a squint test and a
+   sunlit phone screen. Colour alone is never the only signal — the ring is a
+   shape change too, which is what keeps this usable for colour-blind users. */
+.is-selected {
+  border-color: rgba(255,187,28,0.55) !important;
+  background: rgba(255,187,28,0.07) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,187,28,0.35), var(--bloom-md), var(--shadow-1);
+}
+
+/* ─── List row ─────────────────────────────────────────────────────────────
+   The reference "pick a night" table: hairline separators instead of boxed
+   cards, meta on the left, one action pill hard-right. It fits a directory of
+   vendors or transporters far better than a grid of cards does, because the
+   thing being compared is the row status, not its picture. */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.055);
+  transition:
+    background-color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+.list-row:last-child { border-bottom: none; }
+.list-row:hover {
+  background: rgba(255,255,255,0.028);
+  box-shadow: inset 3px 0 0 rgba(255,187,28,0.7);
+}
+.list-row.is-selected { box-shadow: inset 3px 0 0 #FFBB1C, var(--bloom-sm); }
+
+/* ─── Status pills ─────────────────────────────────────────────────────────
+   "Few left" / "Sold out" in the reference do real work: they price urgency
+   into the list without a countdown or a fake scarcity banner. The honest
+   version here is the stock number the vendor already entered.
+   Every pill keeps a word — never colour on its own. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: background-color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+}
+.pill-ok     { background: rgba(34,197,94,0.12);  border-color: rgba(34,197,94,0.32);  color: #4ade80; }
+.pill-low    { background: rgba(255,187,28,0.12); border-color: rgba(255,187,28,0.36); color: #FFBB1C; }
+.pill-out    { background: rgba(239,68,68,0.10);  border-color: rgba(239,68,68,0.30);  color: #f87171; }
+.pill-muted  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.10); color: #B0B0B0; }
+/* Solid amber, dark text — the "Selected" treatment. Highest emphasis; one per row. */
+.pill-active { background: #FFBB1C; border-color: #FFBB1C; color: #0C0C0C; box-shadow: var(--bloom-sm); }
+
+/* ─── Focus ────────────────────────────────────────────────────────────────
+   Components set this per element, but anything missed still needs a ring, and
+   a 2px amber outline on near-black clears 3:1 non-text contrast comfortably. */
+:focus-visible {
+  outline: 2px solid #FFBB1C;
+  outline-offset: 2px;
+}
+
+/* ─── Header brand lockup ──────────────────────────────────────────────────
+   logo.png is 1410x2000 — portrait art cropped to a letterbox by overflow. The
+   crop hides the height but NOT the width: at 280px tall it lays out 197px
+   wide, which at 375px left the role pill about 70px to render 116px of text.
+   The select compressed (selects have no intrinsic minimum), the label spilled
+   out of its own padding box and landed on the cart glyph. That was the bug in
+   the screenshot. Sizing the lockup explicitly, smallest first, is the fix. */
+.brand-lockup {
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+  height: 62px;
+  width: 132px;
+}
+.brand-lockup img {
+  height: 198px;
+  width: auto;
+  display: block;
+  margin-top: -66px;
+  filter: drop-shadow(0 2px 12px rgba(255,187,28,0.18));
+  transition: filter 240ms var(--ease-out);
+}
+.brand-lockup:hover img { filter: drop-shadow(0 4px 18px rgba(255,187,28,0.34)); }
+@media (min-width: 420px) {
+  .brand-lockup     { height: 74px; width: 158px; }
+  .brand-lockup img { height: 236px; margin-top: -78px; }
+}
+@media (min-width: 640px) {
+  .brand-lockup     { height: 88px; width: 188px; }
+  .brand-lockup img { height: 280px; margin-top: -92px; }
+}
+
+/* ─── Role pill ────────────────────────────────────────────────────────────
+   A flex row, not a select with absolutely-positioned decoration over it. The
+   overlay version could only work while the text fitted the padding it was
+   given; as flex children the glyph, the label and the chevron cannot overlap
+   at any width, because the layout will not let them. */
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 10px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background: rgba(255,187,28,0.10);
+  border: 1px solid rgba(255,187,28,0.30);
+  color: #FFBB1C;
+  position: relative;
+  transition: background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+.role-pill:hover {
+  background: rgba(255,187,28,0.16);
+  border-color: rgba(255,187,28,0.50);
+  box-shadow: var(--bloom-sm);
+}
+.role-pill:focus-within {
+  border-color: #FFBB1C;
+  box-shadow: var(--bloom-sm);
+}
+.role-pill svg { flex-shrink: 0; }
+/* The word. Fixed width sized for the longest label so the pill never changes
+   size as the role changes — a control that resizes under your finger is the
+   other half of what went wrong here. Truncates rather than overflowing. */
+.role-pill-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  width: 68px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Below 360px the row genuinely cannot hold brand + word + cart: 132 + 12 +
+   132 + 8 + 44 = 328, against 288 of usable width. Something has to give, and
+   the label is the right thing to drop — the glyph still identifies the role,
+   the chevron still says it opens, and the select keeps its aria-label so the
+   name survives for anyone not looking at it. */
+@media (max-width: 359px) {
+  .role-pill-label { display: none; }
+  .role-pill { padding: 0 8px; }
+}
+
+/* The real control: a transparent native select laid over the whole pill. The
+   select keeps the accessibility and the Android wheel picker; the flex row
+   above supplies the appearance. opacity:0 rather than display:none so it is
+   still focusable and still hit-testable. */
+.role-pill select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  font-size: 16px; /* under 16px iOS Safari zooms the page on focus */
+}
+
+/* ─── Timing ───────────────────────────────────────────────────────────────
+   The reference is explicit about 200-300ms ease-out on hover and select, and
+   it is right: the tile hover here was 380-450ms, which on a pointer feels like
+   the UI is thinking rather than responding. Entrance animations stay long —
+   those are meant to be noticed. Only the response to input is tightened. */
+.product-tile {
+  border-radius: var(--radius-card);
+  transition:
+    transform 240ms var(--ease-out),
+    border-color 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out);
+}
+.product-tile:hover {
+  box-shadow:
+    var(--shadow-3),
+    0 0 0 1px rgba(255,187,28,0.14),
+    var(--bloom-sm);
+}
+.safety-glow { transition: box-shadow 240ms var(--ease-out), transform 200ms var(--ease-out); }
+.stat-card   { transition: transform 240ms var(--ease-out), box-shadow 240ms var(--ease-out), border-color 240ms var(--ease-out); }
+.vendor-row  { transition: transform 240ms var(--ease-out), background 240ms var(--ease-out), border-color 240ms var(--ease-out); }
+.btn-fill::before { transition: transform 300ms var(--ease-out); }
+
+/* ─── Display type ─────────────────────────────────────────────────────────
+   Tight negative tracking is most of what makes a big heading look designed
+   rather than defaulted. Only safe at size, hence the clamp floor. */
+.display-xl {
+  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+.display-lg {
+  font-size: clamp(1.375rem, 4.5vw, 1.875rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+/* Body copy stays inside a comfortable measure. 65-75 characters is the rule;
+   this lands around 70 at 16px. */
+.measure { max-width: 68ch; }
+
+/* ─── Touch ────────────────────────────────────────────────────────────────
+   44x44 minimum, enforced centrally so no new control can quietly miss it. */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Form controls ────────────────────────────────────────────────────────
+   Every control gets 16px, centrally, for one specific reason: iOS Safari
+   zooms the whole page when you focus a field smaller than that, and it does
+   not zoom back out. The usual workaround is maximum-scale=1 in the viewport,
+   which "fixes" it by disabling pinch-zoom for everybody — we took that lock
+   off in layout.tsx, so the floor has to be real.
+   16px also happens to be the readable minimum for anything you type into. */
+input,
+select,
+textarea {
+  font-size: 16px;
+  font-family: inherit;
+  border-radius: var(--radius-input);
+}
+input::placeholder,
+textarea::placeholder { color: #6B6B6B; }
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #FFBB1C;
+  outline-offset: 1px;
+}
+/* The role pill's select is an invisible overlay; it must not inherit the
+   radius or the visible focus ring, the pill itself draws both. */
+.role-pill select { border-radius: var(--radius-pill); }
+.role-pill select:focus-visible { outline: none; }
+
+/* ─── Status dot ───────────────────────────────────────────────────────────
+   Replaces the U+25CF glyph that was being typed into JSX. A character renders
+   at whatever weight the font feels like, sits on the text baseline rather than
+   the optical centre, and needs a hard-coded space after it. This is 6px, takes
+   its colour from the pill around it, and is aria-hidden because the word next
+   to it already says what the state is. */
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 7px;
+  vertical-align: 1px;
+  flex-shrink: 0;
 }

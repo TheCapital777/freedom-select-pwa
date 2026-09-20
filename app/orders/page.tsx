@@ -33,7 +33,7 @@ export default function OrdersPage() {
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>My Orders</h1>
       </div>
 
@@ -50,7 +50,7 @@ export default function OrdersPage() {
               style={{
                 background: "#161616",
                 border: "1px solid #272727",
-                borderRadius: "12px",
+                borderRadius: "var(--radius-card)",
                 overflow: "hidden",
               }}
             >
@@ -65,7 +65,7 @@ export default function OrdersPage() {
                 borderBottom: "1px solid #1E1E1E",
               }}>
                 <div>
-                  <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C", marginBottom: "5px" }}>{order.id}</p>
+                  <p style={{ fontWeight: 800, fontSize: "16px", color: "#FFBB1C", marginBottom: "5px" }}>{order.id}</p>
                   <p style={{ fontSize: "12px", color: "#B0B0B0", fontWeight: 500 }}>
                     {new Date(order.created_at).toLocaleDateString("en-TZ", { day: "numeric", month: "short", year: "numeric" })}
                   </p>
@@ -79,7 +79,7 @@ export default function OrdersPage() {
                     color: st.color,
                     gap: "6px",
                     padding: "6px 12px",
-                    borderRadius: "6px",
+                    borderRadius: "var(--radius-plate)",
                     flexShrink: 0,
                   }}
                 >
@@ -122,8 +122,8 @@ export default function OrdersPage() {
                   </span>
                 </p>
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <p style={{ fontSize: "10px", color: "#B0B0B0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>Total</p>
-                  <p style={{ fontWeight: 900, fontSize: "20px", color: "#FFBB1C" }}>{formatTZS(order.total)}</p>
+                  <p style={{ fontSize: "12px", color: "#B0B0B0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px" }}>Total</p>
+                  <p style={{ fontWeight: 900, fontSize: "22px", color: "#FFBB1C" }}>{formatTZS(order.total)}</p>
                 </div>
               </div>
             </motion.div>

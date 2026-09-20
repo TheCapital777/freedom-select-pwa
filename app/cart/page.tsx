@@ -14,7 +14,7 @@ const ICON_BUTTON: React.CSSProperties = {
   width: "44px", height: "44px",
   display: "flex", alignItems: "center", justifyContent: "center",
   background: "none", border: "none", cursor: "pointer",
-  borderRadius: "8px", flexShrink: 0,
+  borderRadius: "var(--radius-input)", flexShrink: 0,
   transition: "color 200ms cubic-bezier(0.4,0,0.2,1), background 200ms cubic-bezier(0.4,0,0.2,1)",
 };
 
@@ -42,7 +42,7 @@ export default function CartPage() {
             background: "#FFBB1C", color: "#0C0C0C",
             fontWeight: 800, fontSize: "12px",
             letterSpacing: "0.14em", textTransform: "uppercase",
-            textDecoration: "none", borderRadius: "8px",
+            textDecoration: "none", borderRadius: "var(--radius-input)",
           }}
         >
           Browse Products
@@ -56,7 +56,7 @@ export default function CartPage() {
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "2px", flexShrink: 0 }} />
+        <div style={{ width: "3px", height: "22px", background: "#FFBB1C", borderRadius: "var(--radius-stamp)", flexShrink: 0 }} />
         <h1 style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>Your Cart</h1>
         <span className="badge-construction" style={{ letterSpacing: "0.06em" }}>
           {items.length} item{items.length !== 1 ? "s" : ""}
@@ -76,7 +76,7 @@ export default function CartPage() {
               style={{
                 background: "#161616",
                 border: "1px solid #272727",
-                borderRadius: "12px",
+                borderRadius: "var(--radius-card)",
                 padding: "20px 20px 18px",
               }}
             >
@@ -107,7 +107,7 @@ export default function CartPage() {
                   display: "flex", alignItems: "center",
                   background: "#0C0C0C",
                   border: "1px solid #2A2A2A",
-                  borderRadius: "8px", overflow: "hidden",
+                  borderRadius: "var(--radius-input)", overflow: "hidden",
                 }}>
                   <button
                     type="button"
@@ -135,7 +135,7 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                <p style={{ fontWeight: 900, fontSize: "20px", color: "#FFBB1C" }}>
+                <p style={{ fontWeight: 900, fontSize: "22px", color: "#FFBB1C" }}>
                   {formatTZS(item.price * item.qty)}
                 </p>
               </div>
@@ -148,12 +148,12 @@ export default function CartPage() {
       <div style={{
         background: "#161616",
         border: "1px solid #272727",
-        borderRadius: "12px",
+        borderRadius: "var(--radius-card)",
         padding: "20px 20px 18px",
         marginBottom: "18px",
       }}>
         <p style={{
-          fontSize: "11px", fontWeight: 700, letterSpacing: "0.16em",
+          fontSize: "12px", fontWeight: 700, letterSpacing: "0.16em",
           textTransform: "uppercase", color: "#B0B0B0", marginBottom: "18px",
         }}>Order Summary</p>
 
@@ -167,7 +167,7 @@ export default function CartPage() {
         </div>
 
         <div style={{ borderTop: "1px solid #222", paddingTop: "18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontWeight: 900, fontSize: "15px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Total</span>
+          <span style={{ fontWeight: 900, fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Total</span>
           <span style={{ fontWeight: 900, fontSize: "22px", color: "#FFBB1C" }}>
             {formatTZS(totalPrice() + DELIVERY_FEE)}
           </span>
@@ -184,7 +184,7 @@ export default function CartPage() {
           background: "#FFBB1C", color: "#0C0C0C",
           fontWeight: 900, fontSize: "13px", textAlign: "center",
           letterSpacing: "0.14em", textTransform: "uppercase",
-          textDecoration: "none", borderRadius: "10px",
+          textDecoration: "none", borderRadius: "var(--radius-input)",
         }}
       >
         Proceed to Checkout
@@ -198,7 +198,7 @@ export default function CartPage() {
           display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
           marginTop: "8px", minHeight: "44px",
           fontSize: "13px", fontWeight: 600, color: "#B0B0B0", textDecoration: "none",
-          borderRadius: "8px",
+          borderRadius: "var(--radius-input)",
         }}
       >
         <PlusIcon size={24} />

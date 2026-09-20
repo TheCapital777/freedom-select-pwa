@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { ORDERS, VENDORS, DELIVERY_TASKS, PRODUCTS } from "@/lib/mockData";
+import { ORDERS, DELIVERY_TASKS, PRODUCTS } from "@/lib/mockData";
+import { useDirectoryStore } from "@/lib/directoryStore";
+import Link from "next/link";
 import { formatTZS } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import VendorMark from "@/app/_components/VendorMark";
 
 const TABS = ["Overview", "Vendors", "Transport", "Orders"] as const;
@@ -26,7 +27,7 @@ const DELIVERY_STATUS: Record<string, { label: string; color: string; bg: string
 const card: React.CSSProperties = {
   background: "#161616",
   border: "1px solid #242424",
-  borderRadius: "14px",
+  borderRadius: "var(--radius-card)",
 };
 
 /* Figures: tabular so a digit change never shifts the column, and money is
@@ -35,7 +36,7 @@ const num: React.CSSProperties = { fontVariantNumeric: "tabular-nums" };
 
 /* Micro label — #B0B0B0 (text-dim, 9.0:1). Was #444 at 2.0:1. */
 const microLabel: React.CSSProperties = {
-  fontSize: "11px",
+  fontSize: "12px",
   fontWeight: 600,
   letterSpacing: "0.1em",
   textTransform: "uppercase",
@@ -58,6 +59,9 @@ const splitCell: React.CSSProperties = {
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("Overview");
+  // Vendors come from the directory store, not the mockData constant, so a vendor
+  // an admin adds or suspends on /dashboard/admin/directory shows up here too.
+  const VENDORS = useDirectoryStore((s) => s.vendors);
   const totalGMV        = ORDERS.reduce((s, o) => s + o.total, 0);
   const totalCommission = ORDERS.reduce((s, o) => s + o.commission, 0);
   const totalPayout     = ORDERS.reduce((s, o) => s + o.vendor_payout, 0);
@@ -85,7 +89,7 @@ export default function AdminDashboard() {
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <VendorMark initials="CEO" size={56} tone="accent" />
           <div style={{ minWidth: 0 }}>
-            <p style={{ fontWeight: 900, fontSize: "20px", letterSpacing: "-0.02em" }}>CEO Dashboard</p>
+            <p style={{ fontWeight: 900, fontSize: "22px", letterSpacing: "-0.02em" }}>CEO Dashboard</p>
             <p style={{ fontSize: "13px", color: "#B0B0B0", marginTop: "4px" }}>Freedom Select · Arusha Operations</p>
           </div>
         </div>
@@ -125,7 +129,7 @@ export default function AdminDashboard() {
                 position: "relative", overflow: "hidden",
               }}>
                 <div style={{ position: "absolute", top: "-20px", right: "-20px", width: "160px", height: "160px", borderRadius: "50%", background: "#FFBB1C", opacity: 0.06, filter: "blur(50px)", pointerEvents: "none" }} />
-                <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "10px" }}>Platform GMV (All Time)</p>
+                <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "10px" }}>Platform GMV (All Time)</p>
                 <p style={{ ...num, fontWeight: 900, fontSize: "clamp(1.9rem, 9vw, 2.4rem)", letterSpacing: "-0.03em", color: "#F0F0F0", lineHeight: 1, marginBottom: "6px" }}>{formatTZS(totalGMV)}</p>
                 <p style={{ fontSize: "13px", color: "#B0B0B0", marginBottom: "28px" }}>Gross Merchandise Value · {ORDERS.length} orders processed</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(104px, 1fr))", gap: "12px" }}>
@@ -134,9 +138,9 @@ export default function AdminDashboard() {
                     { label: "Vendor Payouts",   val: formatTZS(totalPayout),                     color: "#60a5fa" },
                     { label: "Delivery Margin",  val: formatTZS(totalDelivery),                   color: "#a78bfa" },
                   ].map((s) => (
-                    <div key={s.label} style={{ padding: "14px 12px", background: "#0C0C0C", border: "1px solid #2A2A2A", borderRadius: "10px", textAlign: "center" }}>
-                      <p style={{ ...num, fontWeight: 900, fontSize: "15px", color: s.color, marginBottom: "6px" }}>{s.val}</p>
-                      <p style={{ ...microLabel, fontSize: "10px" }}>{s.label}</p>
+                    <div key={s.label} style={{ padding: "14px 12px", background: "#0C0C0C", border: "1px solid #2A2A2A", borderRadius: "var(--radius-input)", textAlign: "center" }}>
+                      <p style={{ ...num, fontWeight: 900, fontSize: "16px", color: s.color, marginBottom: "6px" }}>{s.val}</p>
+                      <p style={{ ...microLabel, fontSize: "12px" }}>{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -153,8 +157,8 @@ export default function AdminDashboard() {
                   <motion.div key={k.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
                     style={{ ...card, padding: "22px 20px" }}>
                     {/* Colour rule replaces the emoji that used to sit here */}
-                    <div aria-hidden style={{ width: "26px", height: "3px", borderRadius: "2px", background: k.color, marginBottom: "16px" }} />
-                    <p style={{ ...num, fontWeight: 900, fontSize: "32px", color: k.color, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "8px" }}>{k.val}</p>
+                    <div aria-hidden style={{ width: "26px", height: "3px", borderRadius: "var(--radius-stamp)", background: k.color, marginBottom: "16px" }} />
+                    <p style={{ ...num, fontWeight: 900, fontSize: "30px", color: k.color, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "8px" }}>{k.val}</p>
                     <p style={{ ...microLabel, fontSize: "12px", letterSpacing: "0.12em" }}>{k.label}</p>
                   </motion.div>
                 ))}
@@ -162,7 +166,7 @@ export default function AdminDashboard() {
 
               {/* Orders by status */}
               <div style={{ ...card, padding: "24px 22px", marginBottom: "20px" }}>
-                <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "20px" }}>Orders by Status</p>
+                <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "20px" }}>Orders by Status</p>
                 {(["pending", "confirmed", "dispatched", "delivered"] as const).map((s) => {
                   const count = ORDERS.filter(o => o.status === s).length;
                   const pct = Math.round((count / ORDERS.length) * 100);
@@ -173,8 +177,8 @@ export default function AdminDashboard() {
                         <span style={{ fontSize: "14px", fontWeight: 700, color: cfg.color }}>{cfg.label}</span>
                         <span style={{ ...num, fontSize: "13px", color: "#B0B0B0", fontWeight: 600, flexShrink: 0 }}>{count} order{count !== 1 ? "s" : ""} · {pct}%</span>
                       </div>
-                      <div style={{ height: "8px", borderRadius: "6px", background: "#1E1E1E" }}>
-                        <div style={{ height: "8px", borderRadius: "6px", width: `${pct}%`, background: cfg.color, transition: "width 0.7s ease" }} />
+                      <div style={{ height: "8px", borderRadius: "var(--radius-plate)", background: "#1E1E1E" }}>
+                        <div style={{ height: "8px", borderRadius: "var(--radius-plate)", width: `${pct}%`, background: cfg.color, transition: "width 0.7s ease" }} />
                       </div>
                     </div>
                   );
@@ -184,7 +188,7 @@ export default function AdminDashboard() {
               {/* Live transport snapshot */}
               <div style={{ ...card, padding: "24px 22px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", marginBottom: "20px" }}>
-                  <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C" }}>Live Transport</p>
+                  <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C" }}>Live Transport</p>
                   <span style={{ ...num, fontSize: "12px", fontWeight: 600, color: "#B0B0B0" }}>{inTransit} in transit · {completedToday} done today</span>
                 </div>
                 {DELIVERY_TASKS.map((dt) => {
@@ -192,12 +196,12 @@ export default function AdminDashboard() {
                   return (
                     <div key={dt.id} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "16px 0", borderBottom: "1px solid #1A1A1A" }}>
                       {/* Status rail — the word is still on the badge, so colour is never the only signal */}
-                      <span aria-hidden style={{ width: "3px", alignSelf: "stretch", minHeight: "34px", borderRadius: "2px", background: ds.color, flexShrink: 0 }} />
+                      <span aria-hidden style={{ width: "3px", alignSelf: "stretch", minHeight: "34px", borderRadius: "var(--radius-stamp)", background: ds.color, flexShrink: 0 }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontWeight: 700, fontSize: "14px", marginBottom: "4px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{dt.customer_name}</p>
                         <p style={{ fontSize: "12px", color: "#B0B0B0" }}>{dt.delivery_location}</p>
                       </div>
-                      <span style={{ padding: "5px 10px", borderRadius: "6px", background: ds.bg, color: ds.color, fontSize: "11px", fontWeight: 700, flexShrink: 0 }}>{ds.label}</span>
+                      <span style={{ padding: "5px 10px", borderRadius: "var(--radius-plate)", background: ds.bg, color: ds.color, fontSize: "12px", fontWeight: 700, flexShrink: 0 }}>{ds.label}</span>
                     </div>
                   );
                 })}
@@ -211,10 +215,24 @@ export default function AdminDashboard() {
 
               {/* Vendor leaderboard header */}
               <div style={{ ...card, padding: "24px 22px", marginBottom: "20px", background: "linear-gradient(135deg, #12101a, #131313)", border: "1px solid rgba(167,139,250,0.25)" }}>
-                <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#a78bfa", marginBottom: "10px" }}>Vendor Network</p>
-                <p style={{ ...num, fontWeight: 900, fontSize: "26px", letterSpacing: "-0.02em", marginBottom: "6px" }}>{VENDORS.length} Vendors · {totalProducts} Products</p>
+                <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#a78bfa", marginBottom: "10px" }}>Vendor Network</p>
+                <p style={{ ...num, fontWeight: 900, fontSize: "24px", letterSpacing: "-0.02em", marginBottom: "6px" }}>{VENDORS.length} Vendors · {totalProducts} Products</p>
                 <p style={{ ...num, fontSize: "13px", color: "#B0B0B0" }}>Combined GMV contribution: {formatTZS(totalVendorSales)}</p>
               </div>
+
+              {/* Add and remove live here rather than on this read-only overview. */}
+              <Link
+                href="/dashboard/admin/directory"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "7px",
+                  minHeight: "44px", padding: "0 16px", marginBottom: "18px",
+                  background: "#FFBB1C", color: "#0C0C0C", borderRadius: "var(--radius-input)",
+                  fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em",
+                  textTransform: "uppercase", textDecoration: "none",
+                }}
+              >
+                Manage vendors &amp; transporters
+              </Link>
 
               {/* Vendor cards */}
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -235,7 +253,7 @@ export default function AdminDashboard() {
                           <p style={{ fontSize: "13px", color: "#B0B0B0" }}>{v.location}</p>
                         </div>
                         <div style={{ textAlign: "right", flexShrink: 0 }}>
-                          <span style={{ display: "block", padding: "5px 12px", borderRadius: "6px", background: "rgba(34,197,94,0.1)", color: "#22c55e", fontSize: "12px", fontWeight: 700, marginBottom: "6px", textTransform: "capitalize" }}>● {v.status}</span>
+                          <span style={{ display: "block", padding: "5px 12px", borderRadius: "var(--radius-plate)", background: "rgba(34,197,94,0.1)", color: "#22c55e", fontSize: "12px", fontWeight: 700, marginBottom: "6px", textTransform: "capitalize" }}><i className="dot" aria-hidden="true" />{v.status}</span>
                           <p style={{ ...num, fontSize: "12px", color: "#B0B0B0" }}>{v.rating} / 5 rating</p>
                         </div>
                       </div>
@@ -246,8 +264,8 @@ export default function AdminDashboard() {
                           <span style={{ fontSize: "13px", fontWeight: 600, color: "#B0B0B0" }}>Platform share</span>
                           <span style={{ ...num, fontSize: "13px", fontWeight: 800, color: "#FFBB1C" }}>{salesShare}%</span>
                         </div>
-                        <div style={{ height: "6px", borderRadius: "4px", background: "#1E1E1E" }}>
-                          <div style={{ height: "6px", borderRadius: "4px", width: `${salesShare}%`, background: "#FFBB1C" }} />
+                        <div style={{ height: "6px", borderRadius: "var(--radius-stamp)", background: "#1E1E1E" }}>
+                          <div style={{ height: "6px", borderRadius: "var(--radius-stamp)", width: `${salesShare}%`, background: "#FFBB1C" }} />
                         </div>
                       </div>
 
@@ -259,7 +277,7 @@ export default function AdminDashboard() {
                           { label: "Wallet Bal.", val: formatTZS(v.wallet_balance), color: "#FFBB1C" },
                         ].map((s) => (
                           <div key={s.label} style={splitCell}>
-                            <p style={{ ...num, fontWeight: 900, fontSize: "15px", color: s.color, marginBottom: "6px" }}>{s.val}</p>
+                            <p style={{ ...num, fontWeight: 900, fontSize: "16px", color: s.color, marginBottom: "6px" }}>{s.val}</p>
                             <p style={microLabel}>{s.label}</p>
                           </div>
                         ))}
@@ -274,14 +292,14 @@ export default function AdminDashboard() {
                             { label: "GMV",      val: formatTZS(vendorGMV) },
                           ].map((m) => (
                             <div key={m.label}>
-                              <p style={{ ...microLabel, fontSize: "10px", marginBottom: "3px" }}>{m.label}</p>
+                              <p style={{ ...microLabel, fontSize: "12px", marginBottom: "3px" }}>{m.label}</p>
                               <p style={{ ...num, fontSize: "13px", fontWeight: 700, color: "#F0F0F0" }}>{m.val}</p>
                             </div>
                           ))}
                         </div>
                         <button style={{
                           padding: "12px 20px", minHeight: "44px", background: "rgba(255,187,28,0.1)",
-                          border: "1px solid rgba(255,187,28,0.3)", borderRadius: "8px",
+                          border: "1px solid rgba(255,187,28,0.3)", borderRadius: "var(--radius-input)",
                           color: "#FFBB1C", fontSize: "13px", fontWeight: 700, cursor: "pointer", flexShrink: 0,
                         }}>Pay Out</button>
                       </div>
@@ -306,8 +324,8 @@ export default function AdminDashboard() {
                 ].map((k, i) => (
                   <motion.div key={k.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
                     style={{ ...card, padding: "22px 18px" }}>
-                    <div aria-hidden style={{ width: "26px", height: "3px", borderRadius: "2px", background: k.color, marginBottom: "14px" }} />
-                    <p style={{ ...num, fontWeight: 900, fontSize: "34px", color: k.color, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "8px" }}>{k.val}</p>
+                    <div aria-hidden style={{ width: "26px", height: "3px", borderRadius: "var(--radius-stamp)", background: k.color, marginBottom: "14px" }} />
+                    <p style={{ ...num, fontWeight: 900, fontSize: "30px", color: k.color, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "8px" }}>{k.val}</p>
                     <p style={{ ...microLabel, fontSize: "12px" }}>{k.label}</p>
                   </motion.div>
                 ))}
@@ -315,29 +333,29 @@ export default function AdminDashboard() {
 
               {/* Delivery task list */}
               <div style={{ ...card, padding: "24px 20px" }}>
-                <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "20px" }}>All Deliveries</p>
+                <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFBB1C", marginBottom: "20px" }}>All Deliveries</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                   {DELIVERY_TASKS.map((dt, i) => {
                     const ds = DELIVERY_STATUS[dt.status];
                     return (
                       <motion.div key={dt.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
-                        style={{ background: "#0C0C0C", border: "1px solid #222", borderRadius: "12px", overflow: "hidden" }}>
+                        style={{ background: "#0C0C0C", border: "1px solid #222", borderRadius: "var(--radius-card)", overflow: "hidden" }}>
                         <div style={{ height: "3px", background: ds.color, opacity: 0.6 }} />
                         <div style={{ padding: "18px 16px 16px" }}>
                           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "14px" }}>
                             <div style={{ minWidth: 0 }}>
-                              <p style={{ fontWeight: 800, fontSize: "15px", color: "#FFBB1C", marginBottom: "4px" }}>{dt.order_id}</p>
+                              <p style={{ fontWeight: 800, fontSize: "16px", color: "#FFBB1C", marginBottom: "4px" }}>{dt.order_id}</p>
                               <p style={{ fontSize: "14px", fontWeight: 700 }}>{dt.customer_name}</p>
                             </div>
-                            <span style={{ padding: "6px 12px", borderRadius: "6px", background: ds.bg, color: ds.color, fontSize: "11px", fontWeight: 700, flexShrink: 0 }}>{ds.label}</span>
+                            <span style={{ padding: "6px 12px", borderRadius: "var(--radius-plate)", background: ds.bg, color: ds.color, fontSize: "12px", fontWeight: 700, flexShrink: 0 }}>{ds.label}</span>
                           </div>
                           <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "14px" }}>
                             <div>
-                              <p style={{ ...microLabel, fontSize: "10px", marginBottom: "3px" }}>Collect from</p>
+                              <p style={{ ...microLabel, fontSize: "12px", marginBottom: "3px" }}>Collect from</p>
                               <p style={{ fontSize: "13px", fontWeight: 600, color: "#B0B0B0" }}>{dt.pickup_location}</p>
                             </div>
                             <div>
-                              <p style={{ ...microLabel, fontSize: "10px", marginBottom: "3px" }}>Deliver to</p>
+                              <p style={{ ...microLabel, fontSize: "12px", marginBottom: "3px" }}>Deliver to</p>
                               <p style={{ fontSize: "13px", fontWeight: 700, color: "#F0F0F0" }}>{dt.delivery_location}</p>
                             </div>
                           </div>
@@ -372,7 +390,7 @@ export default function AdminDashboard() {
                           <p style={{ fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>{o.customer_name}</p>
                           <p style={{ ...num, fontSize: "13px", color: "#B0B0B0" }}>{o.customer_phone}</p>
                         </div>
-                        <span style={{ padding: "7px 14px", borderRadius: "8px", background: st.bg, color: st.color, fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>{st.label}</span>
+                        <span style={{ padding: "7px 14px", borderRadius: "var(--radius-input)", background: st.bg, color: st.color, fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>{st.label}</span>
                       </div>
 
                       {/* Financial split */}
@@ -383,7 +401,7 @@ export default function AdminDashboard() {
                           { label: "Vendor Out",  val: formatTZS(o.vendor_payout), color: "#60a5fa" },
                         ].map((c) => (
                           <div key={c.label} style={splitCell}>
-                            <p style={{ ...num, fontWeight: 900, fontSize: "15px", color: c.color, marginBottom: "6px" }}>{c.val}</p>
+                            <p style={{ ...num, fontWeight: 900, fontSize: "16px", color: c.color, marginBottom: "6px" }}>{c.val}</p>
                             <p style={microLabel}>{c.label}</p>
                           </div>
                         ))}
@@ -402,7 +420,7 @@ export default function AdminDashboard() {
                       {/* Footer */}
                       <div style={{ padding: "14px 20px", display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "12px", flexWrap: "wrap" }}>
                         <p style={{ fontSize: "13px", color: "#B0B0B0", flex: 1, minWidth: "140px" }}>
-                          <span style={{ ...microLabel, fontSize: "10px", marginRight: "8px" }}>Deliver to</span>
+                          <span style={{ ...microLabel, fontSize: "12px", marginRight: "8px" }}>Deliver to</span>
                           {o.delivery_address}
                         </p>
                         <p style={{ ...num, fontSize: "12px", color: "#B0B0B0", flexShrink: 0 }}>{new Date(o.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</p>

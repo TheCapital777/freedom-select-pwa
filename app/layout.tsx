@@ -19,17 +19,20 @@ export const viewport: Viewport = {
   themeColor: "#0A0A0A",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // maximumScale/userScalable were locking pinch-zoom off. That is a hard
+  // accessibility failure — anyone who needs to magnify a price or a spec
+  // simply cannot. The usual reason to set it, stopping iOS zooming on focused
+  // inputs, is handled properly instead: every input is at least 16px.
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sw">
+    <html lang="en">
       <body className={inter.className}>
         <PWARegister />
+        <div className="ambient-bloom" aria-hidden="true" />
         <Navbar />
-        <main style={{ paddingBottom: "calc(74px + env(safe-area-inset-bottom, 0px))" }}>{children}</main>
+        <main style={{ paddingBottom: "calc(88px + env(safe-area-inset-bottom, 0px))" }}>{children}</main>
         <BottomNav />
       </body>
     </html>

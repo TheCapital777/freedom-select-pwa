@@ -21,7 +21,7 @@ const FOCUS_RING = "focus-visible:[outline:2px_solid_#FFBB1C] focus-visible:[out
 const inputStyle: React.CSSProperties = {
   background: "#141414",
   border: "1px solid #2A2A2A",
-  borderRadius: "8px",
+  borderRadius: "var(--radius-input)",
   color: "#F0F0F0",
   /* 44px minimum touch target — py-2.5 + 14px text was 41px. */
   minHeight: "44px",
@@ -58,7 +58,7 @@ export default function CheckoutPage() {
         <Link
           href="/products"
           className={"px-6 py-3 font-black text-sm uppercase safety-glow inline-flex items-center min-h-11 cursor-pointer " + FOCUS_RING}
-          style={{ background: "#FFBB1C", color: "#0C0C0C", borderRadius: "8px" }}
+          style={{ background: "#FFBB1C", color: "#0C0C0C", borderRadius: "var(--radius-input)" }}
         >
           Browse Materials
         </Link>
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
               <div
                 key={m}
                 className="flex items-center gap-3 px-4 py-3 min-h-11"
-                style={{ background: "#141414", border: "1px solid rgba(255,187,28,0.2)", borderRadius: "8px" }}
+                style={{ background: "#141414", border: "1px solid rgba(255,187,28,0.2)", borderRadius: "var(--radius-input)" }}
               >
                 <span
                   aria-hidden="true"
@@ -199,7 +199,7 @@ export default function CheckoutPage() {
         <button
           type="submit"
           className={"w-full py-4 min-h-11 font-black text-base flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer " + FOCUS_RING}
-          style={{ background: "#25D366", color: "#fff", borderRadius: "8px", boxShadow: "0 0 20px rgba(37,211,102,0.3)" }}
+          style={{ background: "#25D366", color: "#fff", borderRadius: "var(--radius-input)", boxShadow: "0 0 20px rgba(37,211,102,0.3)" }}
         >
           <ChatIcon size={24} strokeWidth={2} />
           Send Order via WhatsApp
