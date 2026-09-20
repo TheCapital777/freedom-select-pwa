@@ -95,6 +95,14 @@ export default function PWAInstallPrompt() {
     else dismiss();
   }
 
+  /* Tell the document a fixed overlay is present so layouts can reserve room
+     for it. Cleaned up on dismiss and on unmount. */
+  useEffect(() => {
+    if (!mode) return;
+    document.body.classList.add("has-install-panel");
+    return () => document.body.classList.remove("has-install-panel");
+  }, [mode]);
+
   if (!mode) return null;
 
   return (

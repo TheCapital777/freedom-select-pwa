@@ -1039,3 +1039,249 @@ textarea:focus-visible {
   color: #8A8A8A;
   text-align: center;
 }
+
+/* ════════════════════════════════════════
+   HERO
+   ────────────────────────────────────────
+   The section was a 480px column centred in whatever the screen had. On a
+   laptop that left a thousand pixels of black either side and still felt
+   cramped, because "FREEDOM" at its 88px ceiling is about 480px wide — the
+   wordmark filled the column edge to edge with nothing around it.
+
+   Rhythm is set in one place here, scaling at two breakpoints rather than
+   being clamped into a single value that has to serve a phone and a monitor
+   at once. Spacing follows the brief's 20-28px between major blocks, doubled
+   at hero scale because a hero's blocks are bigger than a card's.
+   ════════════════════════════════════════ */
+
+.hero-root {
+  background: #0C0C0C;
+  color: #F0F0F0;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* A second, warmer bloom behind the wordmark specifically. The global
+   .ambient-bloom lights the top of every page; this one gives the hero its own
+   centre of light so the type sits in something rather than on nothing. */
+.hero-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 40% at 50% 46%, rgba(255,187,28,0.10) 0%, rgba(255,187,28,0.03) 45%, transparent 72%),
+    radial-gradient(70% 50% at 50% 100%, rgba(255,107,0,0.05) 0%, transparent 70%);
+}
+
+.hero-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 56px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ─── Eyebrow ─── */
+.hero-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #B0B0B0;
+  margin-bottom: 28px;
+}
+
+/* ─── Mark ───────────────────────────────────────────────────────────────
+   logo.png is portrait art; this crops the lockup out of it. Kept above the
+   wordmark deliberately even though both say the same words — the mark is the
+   bag, the wordmark is the type, and the brand is both. */
+.hero-mark {
+  overflow: hidden;
+  height: 62px;
+  margin-bottom: 22px;
+}
+.hero-mark img {
+  height: 196px;
+  width: auto;
+  margin-top: -64px;
+  display: block;
+  filter: drop-shadow(0 4px 22px rgba(255,187,28,0.22));
+}
+
+/* ─── Wordmark ───────────────────────────────────────────────────────────
+   18vw with an 88px ceiling meant the type stopped growing the moment the
+   screen got wide, which is exactly when there was room for it. The ceiling
+   moves with the breakpoints below. */
+.hero-title {
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-size: clamp(3.25rem, 17vw, 4.25rem);
+  margin-bottom: 20px;
+}
+.hero-title span {
+  color: #FFBB1C;
+  /* The accent half gets the glow, so the eye lands on the word that is the
+     product name rather than the adjective. */
+  text-shadow: 0 0 44px rgba(255,187,28,0.30);
+}
+
+/* ─── Tagline ─── */
+.hero-tagline {
+  font-size: 12px;
+  font-weight: 600;
+  color: #B0B0B0;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+/* ─── Actions ────────────────────────────────────────────────────────────
+   Both were 12px uppercase on a 6px radius, which made the primary action of
+   the site look like a form control. 14px, the input radius, and the gradient
+   and glow the install CTA uses — they are the same kind of thing and should
+   look it. */
+.hero-cta-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 36px;
+}
+.hero-cta-primary {
+  flex: 1;
+  min-height: 54px;
+  border: 0;
+  border-radius: var(--radius-input);
+  background: linear-gradient(180deg, #FFD000 0%, #FFBB1C 100%);
+  color: #0C0C0C;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: var(--bloom-md), 0 6px 18px rgba(0,0,0,0.45);
+  transition: filter 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.hero-cta-primary:hover {
+  filter: brightness(1.06);
+  box-shadow: var(--bloom-lg), 0 8px 24px rgba(0,0,0,0.5);
+}
+.hero-cta-primary:active { transform: translateY(1px); }
+
+.hero-cta-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 28px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius-input);
+  color: #F0F0F0;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 200ms var(--ease-out), background-color 200ms var(--ease-out);
+}
+.hero-cta-ghost:hover {
+  border-color: rgba(255,187,28,0.45);
+  background: rgba(255,187,28,0.07);
+}
+
+/* ─── Stat strip ─────────────────────────────────────────────────────────
+   Same label-over-value pattern as the install panel, so the two read as one
+   family. Value first and larger, because the number is the point. */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  padding-top: 26px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stats dt {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #FFBB1C;
+  margin-bottom: 7px;
+}
+.hero-stats dd {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8A8A8A;
+}
+
+/* ─── Tablet up ─── */
+@media (min-width: 640px) {
+  .hero-section {
+    max-width: 620px;
+    padding: 72px 32px 56px;
+  }
+  .hero-mark        { height: 76px; margin-bottom: 26px; }
+  .hero-mark img    { height: 240px; margin-top: -78px; }
+  .hero-title       { font-size: 5.5rem; margin-bottom: 24px; }
+  .hero-eyebrow     { margin-bottom: 34px; font-size: 13px; }
+  .hero-tagline     { margin-bottom: 44px; font-size: 13px; }
+  .hero-cta-row     { margin-bottom: 44px; }
+  .hero-stats       { padding-top: 32px; }
+  .hero-stats dt    { font-size: 30px; }
+}
+
+/* ─── Desktop ─────────────────────────────────────────────────────────────
+   Where the old layout wasted the most. The column widens, the wordmark
+   finally gets to be the size the space allows, and the blocks breathe. */
+@media (min-width: 1024px) {
+  .hero-section {
+    max-width: 820px;
+    padding: 80px 40px 64px;
+  }
+  .hero-title    { font-size: 7rem; margin-bottom: 28px; }
+  .hero-tagline  { margin-bottom: 52px; letter-spacing: 0.22em; }
+  .hero-cta-row  { margin-bottom: 52px; gap: 16px; }
+  .hero-stats    { padding-top: 38px; gap: 20px; }
+  .hero-stats dt { font-size: 36px; }
+  .hero-stats dd { font-size: 11px; }
+}
+
+/* ════════════════════════════════════════
+   INSTALL PANEL — placement against the hero
+   ────────────────────────────────────────
+   The panel is position:fixed at the bottom and the hero is vertically
+   centred, so on a desktop viewport it sat directly on top of Shop Now and
+   Login. The primary action of the whole site was covered by a prompt to
+   install the site.
+
+   Two fixes, because one is not enough. On a narrow screen the hero reserves
+   room beneath itself so the banner has somewhere to be. On a wide one the
+   banner stops spanning the middle and docks bottom-right, which is also where
+   the reference puts its own summary card.
+   ════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* Panel height plus its 88px offset plus air. Only applied where the panel
+     actually spans the column. */
+  body.has-install-panel .hero-section { padding-bottom: 320px; }
+}
+@media (min-width: 768px) {
+  .install-panel {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    width: 400px;
+    max-width: calc(100vw - 48px);
+    margin: 0;
+  }
+}

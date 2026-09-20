@@ -3,84 +3,88 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useRoleStore } from "@/lib/roleStore";
+import { useDirectoryStore } from "@/lib/directoryStore";
 import PWAInstallPrompt from "./_components/PWAInstallPrompt";
 
 const EASE: [number, number, number, number] = [0, 0, 0.2, 1];
 
+/**
+ * The hero.
+ *
+ * It was a 480px column centred in whatever space the screen had, which on a
+ * laptop left a thousand pixels of black either side and still managed to feel
+ * cramped — "FREEDOM" at its 88px ceiling is about 480px wide, so the wordmark
+ * filled the column edge to edge with nothing around it.
+ *
+ * Worse, the install banner is position:fixed at the bottom, and the hero is
+ * vertically centred, so on a desktop viewport the banner sat directly on top
+ * of Shop Now and Login. The primary action of the entire site was covered.
+ * The section now reserves space for it (.hero-section padding-bottom) and the
+ * banner docks bottom-right on a wide screen instead of across the middle.
+ *
+ * Layout and rhythm live in globals.css under "Hero" so the breakpoints can be
+ * real media queries rather than clamps standing in for them.
+ */
 export default function HomePage() {
   const router = useRouter();
   const setRole = useRoleStore((s) => s.setRole);
+
+  /* Live counts, not decoration. These come from the same store the admin
+     directory writes to, so adding a vendor changes the number on the front
+     door. A hard-coded "500+ products" would be the other kind of hero stat. */
+  const products = useDirectoryStore((s) => s.products);
+  const vendors = useDirectoryStore((s) => s.vendors);
+  const transporters = useDirectoryStore((s) => s.transporters);
 
   function shopNow() {
     setRole("customer");
     router.push("/products");
   }
 
+  const STATS: { value: string; label: string }[] = [
+    { value: String(products.filter((p) => p.in_stock).length), label: "In stock" },
+    { value: String(vendors.filter((v) => v.status === "active").length), label: "Vendors" },
+    { value: String(transporters.filter((t) => t.status === "active").length), label: "Transporters" },
+  ];
+
   return (
-    <div style={{
-      background: "#0C0C0C", color: "#F0F0F0",
-      minHeight: "100svh",
-      display: "flex", alignItems: "center", justifyContent: "center",
-    }}>
-      <section style={{
-        width: "100%",
-        maxWidth: "480px",
-        padding: "4rem 2rem 3rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-      }}>
+    <div className="hero-root">
+      <section className="hero-section">
 
         {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.05, ease: EASE }}
-          style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.26em", textTransform: "uppercase", color: "#B0B0B0", marginBottom: "2rem" }}
+          className="hero-eyebrow"
         >
           Arusha · Tanzania
         </motion.p>
 
         {/* Logo mark — cropped from logo.png, sits just above the headline */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE }}
-          style={{ overflow: "hidden", height: "72px", marginBottom: "1.2rem" }}
+          className="hero-mark"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="Freedom Select"
-            style={{
-              height: "228px",
-              width: "auto",
-              marginTop: "-74px",
-              display: "block",
-              filter: "drop-shadow(0 4px 20px rgba(255,187,28,0.18))",
-            }}
-          />
+          <img src="/logo.png" alt="Freedom Select" />
         </motion.div>
 
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.18, ease: EASE }}
-          style={{
-            fontWeight: 900, lineHeight: 0.92,
-            letterSpacing: "-0.03em",
-            fontSize: "clamp(3.2rem, 18vw, 5.5rem)",
-            marginBottom: "1.4rem",
-          }}
+          className="hero-title"
         >
           FREEDOM<br />
-          <span style={{ color: "#FFBB1C" }}>SELECT</span>
+          <span>SELECT</span>
         </motion.h1>
 
         {/* Tagline */}
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.32, ease: EASE }}
-          style={{ fontSize: "12px", color: "#B0B0B0", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "2.8rem" }}
+          className="hero-tagline"
         >
           Build · Source · Deliver
         </motion.p>
@@ -89,28 +93,30 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.42, ease: EASE }}
-          style={{ display: "flex", gap: "12px", width: "100%" }}
+          className="hero-cta-row"
         >
-          <button onClick={shopNow} style={{
-            flex: 1, padding: "18px 0",
-            background: "#FFBB1C", color: "#0C0C0C",
-            fontWeight: 800, fontSize: "12px",
-            letterSpacing: "0.16em", textTransform: "uppercase",
-            border: "none", borderRadius: "var(--radius-plate)", cursor: "pointer",
-          }}>
+          <button onClick={shopNow} className="hero-cta-primary cursor-pointer">
             Shop Now
           </button>
-          <Link href="/login" style={{
-            padding: "18px 28px",
-            border: "1px solid rgba(255,255,255,0.1)", color: "#B0B0B0",
-            fontWeight: 600, fontSize: "12px",
-            letterSpacing: "0.12em", textTransform: "uppercase",
-            textDecoration: "none", borderRadius: "var(--radius-plate)",
-            display: "flex", alignItems: "center", whiteSpace: "nowrap",
-          }}>
+          <Link href="/login" className="hero-cta-ghost cursor-pointer">
             Login
           </Link>
         </motion.div>
+
+        {/* Stat strip — the reference's tracked-label-over-value pattern, which
+            is also what the install panel uses, so the two read as one family. */}
+        <motion.dl
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.54, ease: EASE }}
+          className="hero-stats"
+        >
+          {STATS.map((s) => (
+            <div key={s.label}>
+              <dt>{s.value}</dt>
+              <dd>{s.label}</dd>
+            </div>
+          ))}
+        </motion.dl>
       </section>
 
       <PWAInstallPrompt />
