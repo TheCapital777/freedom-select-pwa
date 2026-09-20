@@ -842,3 +842,200 @@ textarea:focus-visible {
    pages that still hard-code 14px can be moved over without a rewrite. */
 .section-gap  { margin-bottom: 24px; }
 .section-gap-sm { margin-bottom: 20px; }
+
+/* ════════════════════════════════════════
+   INSTALL PANEL
+   ────────────────────────────────────────
+   Built on the reference's order-summary card: glass, a hairline rule, a strip
+   of tracked micro-labels over heavier values, one full-width action, fine
+   print beneath. Type is lifted off the same ladder — 10px tracked labels,
+   13px secondary, 15px values and button, 17px title.
+
+   Sizes are stated in px rather than taken from the utility scale because this
+   panel is the one place the ladder is the design; a later sweep that nudged
+   "everything 15px" would flatten the hierarchy it depends on.
+   ════════════════════════════════════════ */
+
+.install-panel {
+  position: fixed;
+  z-index: 60;                /* above the 50 of the bars it sits between */
+  left: 16px;
+  right: 16px;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  padding: 18px 18px 16px;
+  border-radius: var(--radius-panel);
+  border: 1px solid rgba(255,187,28,0.22);
+  box-shadow: var(--shadow-3), var(--bloom-md);
+  animation: installIn 340ms var(--ease-out) both;
+  max-width: 480px;
+  margin: 0 auto;
+}
+@keyframes installIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .install-panel { animation: none; }
+}
+
+/* ─── Head ─── */
+.install-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 32px;   /* clear of the close button */
+}
+.install-mark {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  /* The icon is a maskable PNG on a dark plate; the rim keeps it from
+     dissolving into the panel behind it. */
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5), var(--bloom-sm);
+}
+.install-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: #F0F0F0;
+}
+.install-sub {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #B0B0B0;
+  margin-top: 3px;
+}
+
+/* ─── Close ─── */
+.install-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-input);
+  color: #6B6B6B;
+  transition: color 200ms var(--ease-out), background-color 200ms var(--ease-out);
+}
+.install-close:hover {
+  color: #F0F0F0;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ─── Rule ─── */
+.install-rule {
+  height: 1px;
+  margin: 16px 0 14px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.16) 12%,
+    rgba(255,255,255,0.16) 88%,
+    transparent 100%
+  );
+}
+
+/* ─── Fact strip ───────────────────────────────────────────────────────────
+   10px uppercase at 0.12em over a 15px value. The tracking is what keeps a
+   10px label readable; without it this size would be a contrast failure
+   dressed up as a design choice. */
+.install-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.install-facts dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8A8A8A;
+  margin-bottom: 5px;
+}
+.install-facts dd {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #F0F0F0;
+  line-height: 1.15;
+}
+
+/* ─── Primary action ───────────────────────────────────────────────────────
+   Full width, 52px, one job. The reference's CTA carries a soft gradient and a
+   glow; this is the same move in safety yellow, which is already the accent
+   for every other commitment in the app. */
+.install-cta {
+  display: block;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: var(--radius-input);
+  background: linear-gradient(180deg, #FFD000 0%, #FFBB1C 100%);
+  color: #0C0C0C;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: var(--bloom-md), 0 6px 18px rgba(0,0,0,0.45);
+  transition: filter 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.install-cta:hover {
+  filter: brightness(1.06);
+  box-shadow: var(--bloom-lg), 0 8px 24px rgba(0,0,0,0.5);
+}
+.install-cta:active { transform: translateY(1px); }
+
+/* ─── iOS steps ────────────────────────────────────────────────────────────
+   Safari never fires beforeinstallprompt, so there is no button to press and
+   pretending otherwise would be worse than saying nothing. Numbered steps at
+   the same 15px the fact values use. */
+.install-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.install-steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #F0F0F0;
+  line-height: 1.35;
+}
+.install-steps strong { font-weight: 700; color: #FFBB1C; }
+.install-steps span {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,187,28,0.14);
+  border: 1px solid rgba(255,187,28,0.32);
+  color: #FFBB1C;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ─── Fine print ─── */
+.install-fine {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #8A8A8A;
+  text-align: center;
+}
