@@ -1041,17 +1041,16 @@ textarea:focus-visible {
 }
 
 /* ════════════════════════════════════════
-   HERO
+   HERO — marketplace composition
    ────────────────────────────────────────
-   The section was a 480px column centred in whatever the screen had. On a
-   laptop that left a thousand pixels of black either side and still felt
-   cramped, because "FREEDOM" at its 88px ceiling is about 480px wide — the
-   wordmark filled the column edge to edge with nothing around it.
+   This replaced a brand poster. The old hero put FREEDOM / SELECT on screen at
+   112px with a tagline and two buttons: handsome, and it told you nothing —
+   you could not tell from it that anything was for sale. The wordmark is a
+   small lockup at the top now and the products carry the screen.
 
-   Rhythm is set in one place here, scaling at two breakpoints rather than
-   being clamped into a single value that has to serve a phone and a monitor
-   at once. Spacing follows the brief's 20-28px between major blocks, doubled
-   at hero scale because a hero's blocks are bigger than a card's.
+   Mobile first, and genuinely: the phone layout is a single column in reading
+   order, and the desktop two-column split at 1024px is a different layout, not
+   the column stretched wide.
    ════════════════════════════════════════ */
 
 .hero-root {
@@ -1065,17 +1064,16 @@ textarea:focus-visible {
   overflow: hidden;
 }
 
-/* A second, warmer bloom behind the wordmark specifically. The global
-   .ambient-bloom lights the top of every page; this one gives the hero its own
-   centre of light so the type sits in something rather than on nothing. */
+/* Ambient light. Low and wide — the product stage carries its own glow, and
+   two competing light sources is how a dark UI turns muddy. */
 .hero-root::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(52% 40% at 50% 46%, rgba(255,187,28,0.10) 0%, rgba(255,187,28,0.03) 45%, transparent 72%),
-    radial-gradient(70% 50% at 50% 100%, rgba(255,107,0,0.05) 0%, transparent 70%);
+    radial-gradient(60% 45% at 50% 0%, rgba(255,187,28,0.07) 0%, transparent 68%),
+    radial-gradient(70% 50% at 50% 100%, rgba(255,107,0,0.04) 0%, transparent 70%);
 }
 
 .hero-section {
@@ -1083,79 +1081,356 @@ textarea:focus-visible {
   z-index: 1;
   width: 100%;
   max-width: 480px;
-  padding: 56px 24px 40px;
+  padding: 28px 20px 40px;
   display: flex;
   flex-direction: column;
+}
+
+/* ─── Brand lockup ─────────────────────────────────────────────────────────
+   logo.png is portrait art; this crops the wordmark out of it. Small on
+   purpose — brand recognition, not brand dominance. */
+.hero-brand {
+  display: flex;
   align-items: center;
-  text-align: center;
+  gap: 12px;
+  margin-bottom: 26px;
 }
-
-/* ─── Eyebrow ─── */
-.hero-eyebrow {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #B0B0B0;
-  margin-bottom: 28px;
-}
-
-/* ─── Mark ───────────────────────────────────────────────────────────────
-   logo.png is portrait art; this crops the lockup out of it. Kept above the
-   wordmark deliberately even though both say the same words — the mark is the
-   bag, the wordmark is the type, and the brand is both. */
-.hero-mark {
-  overflow: hidden;
-  height: 62px;
-  margin-bottom: 22px;
-}
-.hero-mark img {
-  height: 196px;
-  width: auto;
-  margin-top: -64px;
+.hero-brand > div,
+.hero-brand img {
   display: block;
-  filter: drop-shadow(0 4px 22px rgba(255,187,28,0.22));
+}
+.hero-brand img {
+  height: 148px;
+  width: auto;
+  margin: -50px 0;
+  filter: drop-shadow(0 2px 12px rgba(255,187,28,0.20));
+  clip-path: inset(34% 0 34% 0);
+}
+.hero-brand-place {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  border-left: 1px solid rgba(255,255,255,0.12);
+  padding-left: 12px;
+  white-space: nowrap;
 }
 
-/* ─── Wordmark ───────────────────────────────────────────────────────────
-   18vw with an 88px ceiling meant the type stopped growing the moment the
-   screen got wide, which is exactly when there was room for it. The ceiling
-   moves with the breakpoints below. */
+.hero-grid { display: block; }
+
+/* ─── Copy ─────────────────────────────────────────────────────────────────
+   "Find your next." — the headline is commanding but no longer consumes the
+   viewport. At 44-64px it is roughly half what the wordmark used to be, which
+   is what leaves room for the goods. */
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #FFBB1C;
+  margin-bottom: 14px;
+}
+.hero-kicker .dot { margin-right: 8px; }
+
 .hero-title {
+  font-size: clamp(2.75rem, 12vw, 3.5rem);
   font-weight: 900;
-  line-height: 0.9;
-  letter-spacing: -0.035em;
-  font-size: clamp(3.25rem, 17vw, 4.25rem);
-  margin-bottom: 20px;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin-bottom: 14px;
 }
 .hero-title span {
   color: #FFBB1C;
-  /* The accent half gets the glow, so the eye lands on the word that is the
-     product name rather than the adjective. */
-  text-shadow: 0 0 44px rgba(255,187,28,0.30);
+  text-shadow: 0 0 40px rgba(255,187,28,0.26);
 }
 
-/* ─── Tagline ─── */
-.hero-tagline {
+.hero-lede {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #B0B0B0;
+  max-width: 34ch;
+  margin-bottom: 22px;
+}
+
+/* ─── Category rail ────────────────────────────────────────────────────────
+   Scrolls horizontally on a phone with the scrollbar hidden, because a rail
+   that shows a scrollbar reads as an overflow bug rather than an invitation.
+   The active state is a single pill that slides between tabs (shared
+   layoutId in HeroCategories) — no boxed buttons. */
+.hero-cats {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 -20px 24px;
+  padding: 0 20px 2px;
+  scroll-snap-type: x proximity;
+}
+.hero-cats::-webkit-scrollbar { display: none; }
+
+.hero-cat {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: #B0B0B0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  scroll-snap-align: start;
+  transition: color 200ms var(--ease-out);
+}
+.hero-cat:hover:not(.is-locked) { color: #F0F0F0; }
+.hero-cat.is-active { color: #0C0C0C; }
+.hero-cat.is-locked { color: #5A5A5A; cursor: not-allowed; }
+
+/* The moving indicator sits behind the label. */
+.hero-cat-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: #FFBB1C;
+  box-shadow: var(--bloom-sm);
+}
+.hero-cat-label { position: relative; z-index: 1; }
+.hero-cat-soon {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-stamp);
+  padding: 2px 5px;
+}
+
+/* ════════════════════════════════════════
+   PRODUCT STAGE
+   ────────────────────────────────────────
+   NOTE ON IMAGERY, because it is the ceiling on how good this can look: there
+   are no product photographs in this project. The catalogue has always drawn
+   products as SVG line icons over a per-product gradient. So the stage builds
+   depth out of what exists — scale, rotation, blur, shadow and light — rather
+   than faking a photograph. Swapping in real photography later means putting
+   an <img> where the icon sits; none of the geometry below changes.
+   ════════════════════════════════════════ */
+
+.hero-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-stage-empty {
+  min-height: 220px;
+  justify-content: center;
+  color: #6B6B6B;
+  font-size: 14px;
+}
+
+/* Product-tinted ambient light behind the plate. */
+.hero-stage-glow {
+  position: absolute;
+  top: -8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 118%;
+  aspect-ratio: 1;
+  max-height: 340px;
+  opacity: 0.5;
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-plates {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+}
+
+.hero-plate { position: absolute; }
+.hero-plate-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,0.09);
+  color: #F0F0F0;
+  overflow: hidden;
+}
+/* Inset top highlight — the cheapest, most reliable way to make a flat
+   surface read as lit from above. */
+.hero-plate-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+/* ─── Centre ─── */
+.hero-plate-main {
+  position: relative;
+  width: 208px;
+  height: 208px;
+  z-index: 3;
+  touch-action: pan-y;   /* let the page still scroll vertically over it */
+}
+.hero-plate-button {
+  padding: 0;
+  cursor: pointer;
+  box-shadow: var(--shadow-3), 0 0 44px rgba(255,187,28,0.14);
+  transition: box-shadow 240ms var(--ease-out);
+}
+.hero-plate-button:hover {
+  box-shadow: var(--shadow-3), 0 0 60px rgba(255,187,28,0.24);
+}
+.hero-plate-flag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(12,12,12,0.62);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,187,28,0.34);
+  color: #FFBB1C;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-plate-flag .dot { margin-right: 6px; }
+
+/* ─── Satellites ───────────────────────────────────────────────────────────
+   Smaller, tilted, dimmed and blurred. They sit behind the centre so the
+   overlap does the depth work; the blur keeps them from competing for focus.
+   These are the neighbouring products, so the composition previews the swipe. */
+.hero-plate-side {
+  width: 108px;
+  height: 108px;
+  z-index: 1;
+  opacity: 0.55;
+  filter: blur(1.1px);
+}
+.hero-plate-side .hero-plate-face {
+  border-radius: 18px;
+  box-shadow: var(--shadow-2);
+}
+.hero-plate-left  { left: 0;  transform: rotate(-8deg); }
+.hero-plate-right { right: 0; transform: rotate(7deg); }
+
+/* ─── Metadata ─────────────────────────────────────────────────────────────
+   Name, price, vendor. Nothing else — ratings, specs and stock belong to the
+   product page, and a hero that carries them stops being a hero. */
+.hero-meta {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 78px;    /* reserved, so a product change does not jump the page */
+}
+.hero-meta-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #F0F0F0;
+  margin-bottom: 6px;
+}
+.hero-meta-price {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #FFBB1C;
+  line-height: 1;
+}
+.hero-meta-price span {
   font-size: 12px;
   font-weight: 600;
-  color: #B0B0B0;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 36px;
+  color: #B0B0B0;
+}
+.hero-meta-vendor {
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8A8A8A;
 }
 
-/* ─── Actions ────────────────────────────────────────────────────────────
-   Both were 12px uppercase on a 6px radius, which made the primary action of
-   the site look like a form control. 14px, the input radius, and the gradient
-   and glow the install CTA uses — they are the same kind of thing and should
-   look it. */
+/* ─── Pager ─── */
+.hero-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.hero-pager-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-pill);
+  color: #B0B0B0;
+  transition: color 200ms var(--ease-out), border-color 200ms var(--ease-out), background-color 200ms var(--ease-out);
+}
+.hero-pager-btn:hover {
+  color: #FFBB1C;
+  border-color: rgba(255,187,28,0.42);
+  background: rgba(255,187,28,0.07);
+}
+.hero-pager-count {
+  min-width: 68px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #6B6B6B;
+  font-variant-numeric: tabular-nums;
+}
+.hero-pager-count strong { color: #F0F0F0; font-weight: 800; }
+
+/* ─── Actions ─── */
 .hero-cta-row {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  margin-bottom: 36px;
+  margin-top: 28px;
 }
+.hero-cta-desktop { display: none; }
+
 .hero-cta-primary {
   flex: 1;
   min-height: 54px;
@@ -1181,7 +1456,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   min-height: 54px;
-  padding: 0 28px;
+  padding: 0 24px;
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: var(--radius-input);
   color: #F0F0F0;
@@ -1198,81 +1473,114 @@ textarea:focus-visible {
   background: rgba(255,187,28,0.07);
 }
 
-/* ─── Stat strip ─────────────────────────────────────────────────────────
-   Same label-over-value pattern as the install panel, so the two read as one
-   family. Value first and larger, because the number is the point. */
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* ─── Trust strip ──────────────────────────────────────────────────────────
+   Was three big amber numbers competing with the products for attention. Now
+   one quiet line below the fold of the composition — it supports the story
+   rather than telling it. */
+.hero-trust {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  width: 100%;
-  padding-top: 26px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.07);
 }
-.hero-stats dt {
-  font-size: 24px;
+.hero-trust > div { display: flex; align-items: baseline; gap: 6px; }
+.hero-trust dt {
+  font-size: 14px;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: #FFBB1C;
-  margin-bottom: 7px;
+  letter-spacing: -0.01em;
+  color: #F0F0F0;
 }
-.hero-stats dd {
+.hero-trust dd {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8A8A8A;
+  color: #6B6B6B;
 }
 
-/* ─── Tablet up ─── */
+/* ════════════════════════════════════════
+   TABLET
+   ════════════════════════════════════════ */
 @media (min-width: 640px) {
-  .hero-section {
-    max-width: 620px;
-    padding: 72px 32px 56px;
-  }
-  .hero-mark        { height: 76px; margin-bottom: 26px; }
-  .hero-mark img    { height: 240px; margin-top: -78px; }
-  .hero-title       { font-size: 5.5rem; margin-bottom: 24px; }
-  .hero-eyebrow     { margin-bottom: 34px; font-size: 13px; }
-  .hero-tagline     { margin-bottom: 44px; font-size: 13px; }
-  .hero-cta-row     { margin-bottom: 44px; }
-  .hero-stats       { padding-top: 32px; }
-  .hero-stats dt    { font-size: 30px; }
+  .hero-section    { max-width: 560px; padding: 36px 32px 48px; }
+  .hero-title      { font-size: 3.75rem; }
+  .hero-lede       { font-size: 16px; }
+  .hero-plate-main { width: 244px; height: 244px; }
+  .hero-plate-side { width: 126px; height: 126px; }
+  .hero-plates     { min-height: 288px; }
 }
 
-/* ─── Desktop ─────────────────────────────────────────────────────────────
-   Where the old layout wasted the most. The column widens, the wordmark
-   finally gets to be the size the space allows, and the blocks breathe. */
+/* ════════════════════════════════════════
+   DESKTOP — editorial two-column
+   ────────────────────────────────────────
+   A different composition, not a scaled one: copy and actions left, the stage
+   right, with the plates given room to spread. The mobile action row is hidden
+   and the one inside the copy column takes over.
+   ════════════════════════════════════════ */
 @media (min-width: 1024px) {
   .hero-section {
-    max-width: 820px;
-    padding: 80px 40px 64px;
+    max-width: 1120px;
+    padding: 40px 48px 56px;
   }
-  .hero-title    { font-size: 7rem; margin-bottom: 28px; }
-  .hero-tagline  { margin-bottom: 52px; letter-spacing: 0.22em; }
-  .hero-cta-row  { margin-bottom: 52px; gap: 16px; }
-  .hero-stats    { padding-top: 38px; gap: 20px; }
-  .hero-stats dt { font-size: 36px; }
-  .hero-stats dd { font-size: 11px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 56px;
+    align-items: center;
+  }
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-title      { font-size: 4.75rem; margin-bottom: 18px; }
+  .hero-lede       { font-size: 17px; margin-bottom: 28px; max-width: 30ch; }
+  .hero-cats       { margin: 0 0 32px; padding: 0 0 2px; }
+  .hero-cta-row    { margin-top: 0; }
+  .hero-cta-desktop { display: flex; width: auto; }
+  .hero-cta-desktop .hero-cta-primary { flex: 0 0 auto; padding: 0 40px; }
+  .hero-cta-mobile { display: none; }
+
+  .hero-plates     { min-height: 380px; }
+  .hero-plate-main { width: 300px; height: 300px; }
+  .hero-plate-side { width: 158px; height: 158px; opacity: 0.6; }
+  .hero-plate-left  { left: 2%;  transform: rotate(-9deg); }
+  .hero-plate-right { right: 2%; transform: rotate(8deg); }
+  .hero-meta-name  { font-size: 19px; }
+  .hero-meta-price { font-size: 26px; }
+
+  .hero-trust {
+    margin-top: 40px;
+    justify-content: flex-start;
+    gap: 40px;
+  }
+}
+
+/* ════════════════════════════════════════
+   REDUCED MOTION
+   ────────────────────────────────────────
+   The global rule already flattens durations. These kill the two things that
+   would otherwise still read as movement: the satellite tilt reading as
+   instability, and the drag affordance implying motion that will not happen.
+   ════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-plate-side { filter: none; opacity: 0.7; }
+  .hero-plate-main { touch-action: auto; }
 }
 
 /* ════════════════════════════════════════
    INSTALL PANEL — placement against the hero
    ────────────────────────────────────────
-   The panel is position:fixed at the bottom and the hero is vertically
-   centred, so on a desktop viewport it sat directly on top of Shop Now and
-   Login. The primary action of the whole site was covered by a prompt to
-   install the site.
-
-   Two fixes, because one is not enough. On a narrow screen the hero reserves
-   room beneath itself so the banner has somewhere to be. On a wide one the
-   banner stops spanning the middle and docks bottom-right, which is also where
-   the reference puts its own summary card.
+   The panel is position:fixed and the hero is vertically centred, so it once
+   sat directly on top of Shop Now. The panel sets .has-install-panel on <body>
+   while mounted so the hero can reserve room; a class rather than :has(),
+   because this reservation is load-bearing and should not depend on selector
+   support. From 768px it docks bottom-right instead of spanning the middle.
    ════════════════════════════════════════ */
 @media (max-width: 767px) {
-  /* Panel height plus its 88px offset plus air. Only applied where the panel
-     actually spans the column. */
   body.has-install-panel .hero-section { padding-bottom: 320px; }
 }
 @media (min-width: 768px) {

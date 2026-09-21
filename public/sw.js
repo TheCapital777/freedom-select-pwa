@@ -3,7 +3,7 @@
 // a deploy that leaves it unchanged serves returning visitors the PREVIOUS build
 // for a whole load. deploy.py now overwrites this with a build timestamp in out/
 // so it cannot be forgotten — this literal is only the fallback.
-const CACHE_NAME = "freedom-select-20260920-154814";
+const CACHE_NAME = "freedom-select-20260920-171328";
 const PRECACHE = ["/", "/products/", "/cart/", "/checkout/", "/orders/", "/login/", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
